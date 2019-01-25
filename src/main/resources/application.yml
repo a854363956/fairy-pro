@@ -1,0 +1,11 @@
+logging:
+  level:
+    org.springframework: ERROR
+    org.mongodb: ERROR
+    
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: vipshop
