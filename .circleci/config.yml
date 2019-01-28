@@ -8,12 +8,12 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      - image: tkuchiki/delayed-mysql
+      - image: mysql
         environment:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_ROOT_PASSWORD: 'fairy-pro'
-          MYSQL_DATABASE: fairy-pro
-          MYSQL_USER: fairy-pro
+           MYSQL_ROOT_PASSWORD: fairy-pro
+           MYSQL_DATABASE: fairy-pro
+           MYSQL_USER: fairy-pro
+
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -29,7 +29,6 @@ jobs:
     
     steps:
       - checkout
- 
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -38,7 +37,7 @@ jobs:
           - v1-dependencies-
  
       - run: gradle dependencies
- 
+      - run: cat ../sqlscript/dump/DBDump.sql.sql | docker exec -i CONTAINER /usr/bin/mysql -u fairy-pro --password=fairy-pro DATABASE
       - save_cache:
           paths:
             - ~/.m2
