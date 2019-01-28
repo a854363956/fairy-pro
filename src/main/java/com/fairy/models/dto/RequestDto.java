@@ -6,23 +6,8 @@ import com.fairy.models.session.Session;
 
 public class RequestDto<T> implements Serializable, Session {
 	private static final long serialVersionUID = 3588343400070835840L;
-	
-	// 消息唯一ID
-	private String id;
-	
-	// 用户发送的令牌
 	private String token;
-	
-	// 用户请求的数据信息
-	private T body;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	private T data;
 
 	public String getToken() {
 		return token;
@@ -32,12 +17,13 @@ public class RequestDto<T> implements Serializable, Session {
 		this.token = token;
 	}
 
-	public T getBody() {
-		return body;
+	public T getData() {
+		return data;
 	}
 
-	public void setBody(T body) {
-		this.body = body;
+	public void setData(T data) {
+		this.data = data;
 	}
+
 	
 }
