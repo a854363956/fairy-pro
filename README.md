@@ -3,7 +3,7 @@
 ##### 采用的技术集成
 
 1. [项目管理](https://zube.io/a854363956/fairy-pro/w/development/kanban)  
-
+2. [持续集成](https://circleci.com/dashboard)
 
 
 ##### 用户管理 
