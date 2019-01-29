@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      - image: circleci/mysql
+      - image: circleci/mysql:5.7
         environment:
            MYSQL_ROOT_PASSWORD: yuanqiao
            MYSQL_HOST: 127.0.0.1
@@ -43,7 +43,6 @@ jobs:
       - run: sudo apt install mysql-client
       - run: mysql -h 127.0.0.1 -uroot -pyuanqiao fairy-pro < sqlscript/dump/DBDump.sql
       - run: gradle dependencies
-
       - save_cache:
           paths:
             - ~/.m2
