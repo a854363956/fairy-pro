@@ -35,7 +35,7 @@ jobs:
       - run: sudo apt install -y wget
       - run: sudo apt install -y mysql-client
       - run: wget https://raw.githubusercontent.com/a854363956/fairy-pro/master/sqlscript/dump/DBDump.sql
-      - run: mysql -uroot -pfairy-pro fairy-pro < ./DBDump.sql
+      - run: mysql -h 127.0.0.1 -uroot -pfairy-pro fairy-pro < ./DBDump.sql
       - run: gradle dependencies
 
       - save_cache:
