@@ -30,7 +30,6 @@ public class FairyGroupRole implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name = "create_time")
 	private Date createTime;
-
 	public Long getId() {
 		return id;
 	}

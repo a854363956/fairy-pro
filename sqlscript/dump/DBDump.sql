@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `fairy-pro` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `fairy-pro`;
 -- MySQL dump 10.13  Distrib 8.0.13, for Win64 (x86_64)
 --
 -- Host: localhost    Database: fairy-pro
@@ -39,6 +37,7 @@ CREATE TABLE `fairy_base_role` (
 
 LOCK TABLES `fairy_base_role` WRITE;
 /*!40000 ALTER TABLE `fairy_base_role` DISABLE KEYS */;
+INSERT INTO `fairy_base_role` VALUES (0,'超级管理',0,'2019-01-29 13:56:32');
 /*!40000 ALTER TABLE `fairy_base_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,7 +51,7 @@ DROP TABLE IF EXISTS `fairy_base_session`;
 CREATE TABLE `fairy_base_session` (
   `id` bigint(20) NOT NULL,
   `session_code` varchar(64) NOT NULL COMMENT '生成64位的SessionCode防止暴力破解',
-  `ipAddr` varchar(45) NOT NULL COMMENT '第一次登入的IP地址',
+  `ip_addr` varchar(45) NOT NULL COMMENT '第一次登入的IP地址',
   `equipment` int(11) NOT NULL COMMENT '登入的设备类型',
   `last_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后登入时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最早登入时间',
@@ -66,6 +65,7 @@ CREATE TABLE `fairy_base_session` (
 
 LOCK TABLES `fairy_base_session` WRITE;
 /*!40000 ALTER TABLE `fairy_base_session` DISABLE KEYS */;
+INSERT INTO `fairy_base_session` VALUES (210294173322969088,'583db9ce5df34fe6ae833fdd4590ad6815cbb4fcd1fc4430b5b04cf1a360684b','127.0.0.1',0,'2019-01-29 07:13:58','2019-01-29 07:13:58'),(210294293582053376,'e3e3f03407624a7e8b6c0627c5599e7b95cd04f671d8420f9b72ff8f9f9547bc','127.0.0.1',0,'2019-01-29 07:14:27','2019-01-29 07:14:27'),(210294338809233408,'ca91cbae46584c029fee0ed3858dfbeb6cb8957f339548a3987b5f3224091e35','127.0.0.1',0,'2019-01-29 07:14:37','2019-01-29 07:14:37');
 /*!40000 ALTER TABLE `fairy_base_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,6 +95,7 @@ CREATE TABLE `fairy_base_user` (
 
 LOCK TABLES `fairy_base_user` WRITE;
 /*!40000 ALTER TABLE `fairy_base_user` DISABLE KEYS */;
+INSERT INTO `fairy_base_user` VALUES (0,'admin','超级管理员','429005199609080071','+/?/^\'^||?,,/+!//_?/^+?~+~/,.-`=','zhangjin0908@hotmail.com','2019-01-29 13:55:20');
 /*!40000 ALTER TABLE `fairy_base_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,6 +128,7 @@ CREATE TABLE `fairy_group_role` (
 
 LOCK TABLES `fairy_group_role` WRITE;
 /*!40000 ALTER TABLE `fairy_group_role` DISABLE KEYS */;
+INSERT INTO `fairy_group_role` VALUES (0,0,0,0,'2019-01-29 14:13:11');
 /*!40000 ALTER TABLE `fairy_group_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -139,4 +141,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-28 17:02:21
+-- Dump completed on 2019-01-29 15:21:28

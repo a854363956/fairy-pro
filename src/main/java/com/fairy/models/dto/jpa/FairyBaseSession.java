@@ -12,7 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "fairy_base_user" )
+@Table(name = "fairy_base_session" )
 public class FairyBaseSession implements Serializable{
 	private static final long serialVersionUID = 647410867485886904L;
 	@Id
@@ -24,9 +24,9 @@ public class FairyBaseSession implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name="create_time")
 	private Date createTime;
-	@Column(name="sessionCode")
+	@Column(name="session_code")
 	private String sessionCode;
-	@Column(name="ipAddr")
+	@Column(name="ip_addr")
 	private String ipAddr;
 	@Column(name="equipment")
 	private Integer equipment;

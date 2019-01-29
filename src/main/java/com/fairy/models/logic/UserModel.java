@@ -4,8 +4,9 @@ package com.fairy.models.logic;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import com.fairy.models.common.Md5Variant;
@@ -15,7 +16,6 @@ import com.fairy.models.dto.jpa.FairyBaseUser;
 import com.fairy.models.logic.jpa.RoleGroupModelJpa;
 import com.fairy.models.logic.jpa.SessionModelJpa;
 import com.fairy.models.logic.jpa.UserModelJpa;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 
 
@@ -59,7 +59,16 @@ public class UserModel {
 	}
 	
 	/**
-	 * 用户登入
+	 *   退出登入,删除对应的会话信息
+	 * @param sessionCode
+	 */
+	@Transactional
+	public void logout(String sessionCode) {
+		sessionModelJpa.deleteBySessionCode(sessionCode);
+	}
+	
+	/**
+	 *   用户登入
 	 * @param loginName 登入名称
 	 * @param password  登入的密码
 	 * @param ipAddr    登入的IP地址
@@ -67,7 +76,8 @@ public class UserModel {
 	 * @return 如果登入成功,返回sessionCode
 	 */
 	public Map<String, Object> login(String loginName,String password,String ipAddr,Integer equipment) {
-		switch (verify(loginName,password)) {
+		UserVerifyStatus uvs = verify(loginName,password);
+		switch (uvs) {
 		case SUCCESS:
 			FairyBaseSession fbs = new FairyBaseSession(
 					snowflakeId.nextId(),
@@ -87,9 +97,13 @@ public class UserModel {
 			return ImmutableMap.of(
 					"status",UserVerifyStatus.USER_DOES_NOT_EXIST
 					);
+		case UNMAINTAINED_ROLES:
+			return ImmutableMap.of(
+					"status",UserVerifyStatus.USER_DOES_NOT_EXIST
+					);
 		default:
 			return ImmutableMap.of(
-					"status",UserVerifyStatus.SYSTEM_ERROR
+					"status",uvs
 					);
 		}
 	}
