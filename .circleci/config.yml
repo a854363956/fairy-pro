@@ -10,12 +10,9 @@ jobs:
       - image: circleci/openjdk:8-jdk
       - image: circleci/mysql
         environment:
-           MYSQL_ROOT_PASSWORD: fairy-pro
+           MYSQL_ROOT_PASSWORD: yuanqiao
            MYSQL_HOST: 127.0.0.1
            MYSQL_DATABASE: fairy-pro
-           MYSQL_USER: fairy-pro
-
-
  
     working_directory: ~/repo
  
@@ -32,14 +29,10 @@ jobs:
           - v1-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
- 
       - run: sudo apt install -y wget
-      - run: sudo apt install -y mysql-client
-      - run: wget https://gist.githubusercontent.com/takady/18abafbeb911e353095ab7e374b2dc9b/raw/f2d98fb60c575f4f19a09f220b9bcb32b4dc5487/my.cnf
-      - run: sudo rm -rf /etc/mysql/my.cnf
-      - run: sudo mv ./my.cnf /etc/mysql/my.cnf
+      - run: sudo apt install mysql-client
       - run: wget https://raw.githubusercontent.com/a854363956/fairy-pro/master/sqlscript/dump/DBDump.sql
-      - run: mysql -uroot -pfairy-pro fairy-pro < ./DBDump.sql
+      - run: mysql -h 127.0.0.1 -uroot -pyuanqiao fairy-pro < DBDump.sql
       - run: gradle dependencies
 
       - save_cache:
