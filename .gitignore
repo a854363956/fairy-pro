@@ -1,6 +1,7 @@
 .gradle
 /build/
 /bin/
+/fairy-pro-log/
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###
