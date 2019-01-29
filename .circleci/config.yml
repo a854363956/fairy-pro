@@ -15,10 +15,6 @@ jobs:
            MYSQL_USER: fairy-pro
 
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
  
     working_directory: ~/repo
  
@@ -36,8 +32,11 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
  
+      - run: sudo apt install -y wget 
+      - run: wget https://raw.githubusercontent.com/a854363956/fairy-pro/master/sqlscript/dump/DBDump.sql
+      - run: ./DBDump.sql | docker exec -i CONTAINER /usr/bin/mysql -u fairy-pro --password=fairy-pro DATABASE
       - run: gradle dependencies
-      - run: cat ../sqlscript/dump/DBDump.sql.sql | docker exec -i CONTAINER /usr/bin/mysql -u fairy-pro --password=fairy-pro DATABASE
+
       - save_cache:
           paths:
             - ~/.m2
