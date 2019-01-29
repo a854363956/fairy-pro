@@ -29,7 +29,7 @@ jobs:
           - v1-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-       - run:
+      - run:
           name: Waiting for MySQL to be ready
           command: |
             for i in `seq 1 30`;
@@ -39,12 +39,10 @@ jobs:
               sleep 1
             done
             echo Failed waiting for MySQL && exit 1
-            
-      - run: sudo apt install -y wget
+      # Import DB Dump
       - run: sudo apt install mysql-client
       - run: sudo service mysql start
-      - run: wget https://raw.githubusercontent.com/a854363956/fairy-pro/master/sqlscript/dump/DBDump.sql
-      - run: mysql -h 127.0.0.1 -uroot -pyuanqiao fairy-pro < DBDump.sql
+      - run: mysql -h 127.0.0.1 -uroot -pyuanqiao fairy-pro < sqlscript/DBDump.sql
       - run: gradle dependencies
 
       - save_cache:
