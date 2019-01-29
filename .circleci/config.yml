@@ -32,8 +32,8 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
  
-      - run: sudo apt install -y wget 
-      - run: sudo apt install -y mysql 
+      - run: sudo apt install -y wget
+      - run: sudo apt install -y mysql-client
       - run: wget https://raw.githubusercontent.com/a854363956/fairy-pro/master/sqlscript/dump/DBDump.sql
       - run: mysql -uroot -pfairy-pro fairy-pro < ./DBDump.sql
       - run: gradle dependencies
