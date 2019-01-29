@@ -34,7 +34,7 @@ jobs:
  
       - run: sudo apt install -y wget 
       - run: wget https://raw.githubusercontent.com/a854363956/fairy-pro/master/sqlscript/dump/DBDump.sql
-      - run: ./DBDump.sql | docker exec -i CONTAINER /usr/bin/mysql -u fairy-pro --password=fairy-pro DATABASE
+      - run: mysqldump -uroot -pfairy-pro fairy-pro > ./DBDump.sql
       - run: gradle dependencies
 
       - save_cache:
