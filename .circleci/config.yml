@@ -33,6 +33,7 @@ jobs:
           - v1-dependencies-
  
       - run: sudo apt install -y wget 
+      - run: sudo apt install -y mysql 
       - run: wget https://raw.githubusercontent.com/a854363956/fairy-pro/master/sqlscript/dump/DBDump.sql
       - run: mysql -uroot -pfairy-pro fairy-pro < ./DBDump.sql
       - run: gradle dependencies
