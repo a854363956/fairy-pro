@@ -8,9 +8,10 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      - image: mysql
+      - image: circleci/mysql
         environment:
            MYSQL_ROOT_PASSWORD: fairy-pro
+           MYSQL_HOST: 127.0.0.1
            MYSQL_DATABASE: fairy-pro
            MYSQL_USER: fairy-pro
 
