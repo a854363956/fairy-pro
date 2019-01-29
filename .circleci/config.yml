@@ -41,7 +41,7 @@ jobs:
             echo Failed waiting for MySQL && exit 1
       # Import DB Dump
       - run: sudo apt install mysql-client
-      - run: mysql -h 127.0.0.1 -uroot -pyuanqiao fairy-pro < sqlscript/DBDump.sql
+      - run: mysql -h 127.0.0.1 -uroot -pyuanqiao fairy-pro < sqlscript/dump/DBDump.sql
       - run: gradle dependencies
 
       - save_cache:
