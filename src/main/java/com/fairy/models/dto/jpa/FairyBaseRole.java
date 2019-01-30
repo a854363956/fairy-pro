@@ -6,35 +6,24 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fairy.models.TestUserModel;
-
 import lombok.Data;
 
 @Entity
-@Table(name = "fairy_group_role" )
-public @Data class FairyGroupRole implements Serializable {
-	private static final long serialVersionUID = -950862400013919633L;
+@Table(name = "fairy_base_role" )
+public @Data class FairyBaseRole implements Serializable{
+	private static final long serialVersionUID = 5039501984702120313L;
 	@Id
 	@Column(name = "id")
 	private Long id;
-	
-	@Column(name = "user_id")
-	private Long userId;
-	
-	@Column(name = "role_id")
-	private Long roleId;
-	
-	@Column(name = "authorize")
-	private Long authorize;
-	
+	@Column(name = "role_name")
+	private String roleName;
+	@Column(name = "role_type")
+	private Integer roleType;
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name = "create_time")
 	private Date createTime;
-	
 }

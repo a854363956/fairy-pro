@@ -14,13 +14,15 @@ import com.alibaba.fastjson.JSON;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.UserVerifyStatus;
 import com.fairy.models.logic.jpa.SessionModelJpa;
+import com.fairy.models.logic.jpa.UserModelJpa;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestUserModel {
    @Autowired
    private UserModel userModel;
-   
+   @Autowired
+   private UserModelJpa userModelJpa;
    @Autowired
    private SessionModelJpa sessionModelJpa;
    @Test
@@ -39,6 +41,20 @@ public class TestUserModel {
 	   System.out.println(JSON.toJSONString(map));
    }
    
+   @Test
+   public void testAddUser() throws Exception {
+		String loginName="zhangj";
+		String realName="张尽";
+		String identityCard="429005199609080071";
+		String password="admin";
+		String email="zhangjin0908@hotmail.com";
+		Integer currentType=1;
+		Long  currentUser= 0L;
+		Long roleId=0L;
+		userModel.addUser(loginName, realName, identityCard, password, email, currentType, currentUser, roleId);
+		int size = userModelJpa.findUserByLoginName("zhangj").size();
+		assertEquals(size, 1);
+   }
    @Test
    public void testOLogot() {
 	   sessionModelJpa.findAll().forEach((data)->{

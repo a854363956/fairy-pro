@@ -11,6 +11,8 @@ public class TestMd5Variant {
 	public void testEncryption() {
 		String data = Md5Variant.strongEncryption("admin");
 		assertEquals(data.length(), 32);
+		String data2 = Md5Variant.strongEncryption("admin");
+		assertEquals(data, data2);
 		System.out.println(data);
 	}
 }

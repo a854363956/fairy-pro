@@ -11,9 +11,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "fairy_base_session" )
-public class FairyBaseSession implements Serializable{
+public @Data class FairyBaseSession implements Serializable{
 	private static final long serialVersionUID = 647410867485886904L;
 	@Id
 	@Column(name="id")
@@ -47,41 +49,4 @@ public class FairyBaseSession implements Serializable{
 	public FairyBaseSession() {
 	}
 
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public Date getLastTime() {
-		return lastTime;
-	}
-	public void setLastTime(Date lastTime) {
-		this.lastTime = lastTime;
-	}
-
-	public Date getCreate_time() {
-		return createTime;
-	}
-	public void setCreate_time(Date createTime) {
-		this.createTime = createTime;
-	}
-	public String getSessionCode() {
-		return sessionCode;
-	}
-	public void setSessionCode(String sessionCode) {
-		this.sessionCode = sessionCode;
-	}
-	public String getIpAddr() {
-		return ipAddr;
-	}
-	public void setIpAddr(String ipAddr) {
-		this.ipAddr = ipAddr;
-	}
-	public Integer getEquipment() {
-		return equipment;
-	}
-	public void setEquipment(Integer equipment) {
-		this.equipment = equipment;
-	}
 }

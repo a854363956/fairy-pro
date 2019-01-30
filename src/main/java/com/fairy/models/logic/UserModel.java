@@ -1,8 +1,10 @@
 package com.fairy.models.logic;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -11,9 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.fairy.models.common.Md5Variant;
 import com.fairy.models.common.SnowflakeIdGenerator;
+import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
+import com.fairy.models.dto.jpa.FairyGroupRole;
 import com.fairy.models.logic.jpa.RoleGroupModelJpa;
+import com.fairy.models.logic.jpa.RoleModelJpa;
 import com.fairy.models.logic.jpa.SessionModelJpa;
 import com.fairy.models.logic.jpa.UserModelJpa;
 import com.google.common.collect.ImmutableMap;
@@ -36,6 +41,8 @@ public class UserModel {
 	private SessionModelJpa sessionModelJpa;
 	@Autowired
 	private RoleGroupModelJpa roleGroupModelJpa;
+	@Autowired
+	private RoleModelJpa roleModelJap;
 	/**
 	 * 验证当前用户的密码是否正确
 	 * @param loginName 当前登入的账号
@@ -67,6 +74,62 @@ public class UserModel {
 		sessionModelJpa.deleteBySessionCode(sessionCode);
 	}
 	
+	/**
+	 *  添加用户
+	 * @param loginName    登入名称
+	 * @param realName     用户的真实姓名
+	 * @param identityCard 身份证
+	 * @param password     用户密码
+	 * @param email        用户的邮箱地址
+	 * @param roleId       所属的角色ID
+	 * @param currentType  当前登入人的角色类别
+	 * @param currentUser  当前登入人的人员ID
+	 * @throws Exception 
+	 */
+	@Transactional
+	public void addUser(
+				String loginName,
+				String realName,
+				String identityCard,
+				String password,
+				String email,
+				Integer currentType,
+				Long  currentUser,
+				Long roleId
+			) throws Exception {
+		Optional<FairyBaseRole> roleInfo = roleModelJap.findById(roleId);
+		
+		if(roleInfo.isPresent()) {
+			if(roleInfo.get().getRoleType() <= currentType) {
+				throw new Exception(String.format("Insufficient permissions, current permissions [ %s ], target permissions [ %s ].", currentType,roleInfo));
+			}else {
+				
+				// 创建人员信息
+				FairyBaseUser fbu = new FairyBaseUser();
+				fbu.setCreateTime(new Date());
+				fbu.setEmail(email);
+				fbu.setId(snowflakeId.nextId());
+				fbu.setIdentityCard(identityCard);
+				fbu.setLoginName(loginName);
+				fbu.setPassword(Md5Variant.strongEncryption(password));
+				fbu.setRealName(realName);
+				userModelJpa.save(fbu);
+				
+				// 创建角色关联信息
+				FairyGroupRole fgr = new FairyGroupRole();
+				fgr.setId(snowflakeId.nextId());
+				fgr.setCreateTime(new Date());
+				fgr.setAuthorize(currentUser);
+				fgr.setRoleId(roleId);
+				fgr.setUserId(fbu.getId());
+				roleGroupModelJpa.save(fgr);
+				
+				return;
+			}
+		}else {
+			throw new Exception(String.format("Of course, the role does not exist. Please check it.[ %s ]", roleId));
+		}
+	}
 	/**
 	 *   用户登入
 	 * @param loginName 登入名称
