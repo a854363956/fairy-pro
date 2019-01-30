@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `fairy_base_role`;
 CREATE TABLE `fairy_base_role` (
   `id` bigint(20) NOT NULL,
   `role_name` varchar(45) NOT NULL COMMENT '角色名称',
-  `roleType` int(11) NOT NULL COMMENT '角色类型 0 表示最高管理员(任何操作) 1表示普通管理员(允许创建用户) 2 表示普通用户(不能创建用户查询日志信息)',
+  `role_type` int(11) NOT NULL COMMENT '角色类型 0 表示最高管理员(任何操作) 1表示普通管理员(允许创建用户) 2 表示普通用户(不能创建用户查询日志信息)',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -37,7 +37,7 @@ CREATE TABLE `fairy_base_role` (
 
 LOCK TABLES `fairy_base_role` WRITE;
 /*!40000 ALTER TABLE `fairy_base_role` DISABLE KEYS */;
-INSERT INTO `fairy_base_role` VALUES (0,'超级管理',0,'2019-01-29 13:56:32');
+INSERT INTO `fairy_base_role` VALUES (0,'超级管理',0,'2019-01-29 13:56:32'),(1,'管理员',1,'2019-01-30 11:31:06');
 /*!40000 ALTER TABLE `fairy_base_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,6 +50,7 @@ DROP TABLE IF EXISTS `fairy_base_session`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `fairy_base_session` (
   `id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `session_code` varchar(64) NOT NULL COMMENT '生成64位的SessionCode防止暴力破解',
   `ip_addr` varchar(45) NOT NULL COMMENT '第一次登入的IP地址',
   `equipment` int(11) NOT NULL COMMENT '登入的设备类型',
@@ -65,7 +66,7 @@ CREATE TABLE `fairy_base_session` (
 
 LOCK TABLES `fairy_base_session` WRITE;
 /*!40000 ALTER TABLE `fairy_base_session` DISABLE KEYS */;
-INSERT INTO `fairy_base_session` VALUES (210294173322969088,'583db9ce5df34fe6ae833fdd4590ad6815cbb4fcd1fc4430b5b04cf1a360684b','127.0.0.1',0,'2019-01-29 07:13:58','2019-01-29 07:13:58'),(210294293582053376,'e3e3f03407624a7e8b6c0627c5599e7b95cd04f671d8420f9b72ff8f9f9547bc','127.0.0.1',0,'2019-01-29 07:14:27','2019-01-29 07:14:27'),(210294338809233408,'ca91cbae46584c029fee0ed3858dfbeb6cb8957f339548a3987b5f3224091e35','127.0.0.1',0,'2019-01-29 07:14:37','2019-01-29 07:14:37');
+INSERT INTO `fairy_base_session` VALUES (210294173322969088,0,'583db9ce5df34fe6ae833fdd4590ad6815cbb4fcd1fc4430b5b04cf1a360684b','127.0.0.1',0,'2019-01-29 07:13:58','2019-01-29 07:13:58');
 /*!40000 ALTER TABLE `fairy_base_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,4 +142,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-29 15:21:28
+-- Dump completed on 2019-01-30 11:54:36

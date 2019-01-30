@@ -48,8 +48,7 @@ public class UserModel {
 	 * @param loginName 当前登入的账号
 	 * @param password   当前的密码
 	 */
-	public UserVerifyStatus verify(String loginName,String password) {
-		List<FairyBaseUser> users =  userModelJpa.findUserByLoginName(loginName);
+	public UserVerifyStatus verify(List<FairyBaseUser> users,String loginName,String password) {
 		if(users.size() == 0) {
 			return UserVerifyStatus.USER_DOES_NOT_EXIST;
 		}else {
@@ -84,7 +83,6 @@ public class UserModel {
 	 * @param roleId       所属的角色ID
 	 * @param currentType  当前登入人的角色类别
 	 * @param currentUser  当前登入人的人员ID
-	 * @throws Exception 
 	 */
 	@Transactional
 	public void addUser(
@@ -96,12 +94,15 @@ public class UserModel {
 				Integer currentType,
 				Long  currentUser,
 				Long roleId
-			) throws Exception {
+			) {
 		Optional<FairyBaseRole> roleInfo = roleModelJap.findById(roleId);
-		
+		// 只有类型为1 或者类型为0 的才能进行创建人员,否则表示权限不足
+		if(1 != currentType && 0 != currentType) {
+			throw new RuntimeException("Permission Denied");
+		}
 		if(roleInfo.isPresent()) {
 			if(roleInfo.get().getRoleType() <= currentType) {
-				throw new Exception(String.format("Insufficient permissions, current permissions [ %s ], target permissions [ %s ].", currentType,roleInfo));
+				throw new RuntimeException(String.format("Insufficient permissions, current permissions [ %s ], target permissions [ %s ].", currentType,roleInfo));
 			}else {
 				
 				// 创建人员信息
@@ -127,7 +128,7 @@ public class UserModel {
 				return;
 			}
 		}else {
-			throw new Exception(String.format("Of course, the role does not exist. Please check it.[ %s ]", roleId));
+			throw new RuntimeException(String.format("Of course, the role does not exist. Please check it.[ %s ]", roleId));
 		}
 	}
 	/**
@@ -139,11 +140,13 @@ public class UserModel {
 	 * @return 如果登入成功,返回sessionCode
 	 */
 	public Map<String, Object> login(String loginName,String password,String ipAddr,Integer equipment) {
-		UserVerifyStatus uvs = verify(loginName,password);
+		List<FairyBaseUser> users =  userModelJpa.findUserByLoginName(loginName);
+		UserVerifyStatus uvs = verify(users,loginName,password);
 		switch (uvs) {
 		case SUCCESS:
 			FairyBaseSession fbs = new FairyBaseSession(
 					snowflakeId.nextId(),
+					users.get(0).getId(),
 					ipAddr,
 					equipment
 					);

@@ -20,6 +20,8 @@ public @Data class FairyBaseSession implements Serializable{
 	@Id
 	@Column(name="id")
 	private Long id;
+	@Column(name = "user_id")
+	private Long userId;
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name="last_time")
 	private Date lastTime;
@@ -35,12 +37,14 @@ public @Data class FairyBaseSession implements Serializable{
 	
 	public FairyBaseSession(
 			Long id,
+			Long userId,
 			String ipAddr, 
 			Integer equipment) {
 		super();
 		this.ipAddr = ipAddr;
 		this.equipment = equipment;
 		this.id = id;
+		this.userId = userId;
 		this.sessionCode = (UUID.randomUUID().toString()+UUID.randomUUID().toString()).replaceAll("-", "");
 		this.createTime=new Date();
 		this.lastTime = new Date();

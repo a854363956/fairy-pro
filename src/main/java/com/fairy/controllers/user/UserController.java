@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fairy.models.common.Session;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
 import com.fairy.models.logic.UserModel;
@@ -18,6 +19,9 @@ import com.fairy.models.logic.UserModel;
 public class UserController {
 	@Autowired
 	private UserModel userModel;
+	
+	@Autowired
+	private Session session;
 	
 	@RequestMapping("/login")
 	public ResponseDto<Object> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
@@ -34,6 +38,20 @@ public class UserController {
 	public ResponseDto<String> logout(@RequestBody RequestDto<JSONObject> request) {
 		String token = request.getToken();
 		userModel.logout(token);
+		return ResponseDto.getSuccess();
+	}
+	
+	@RequestMapping("/addUser")
+	public ResponseDto<String> addUser(@RequestBody RequestDto<JSONObject> request) {
+		String loginName = request.getData().getString("loginName");
+		String realName = request.getData().getString("realName");
+		String identityCard = request.getData().getString("identityCard");
+		String password = request.getData().getString("password");
+		String email = request.getData().getString("email");
+		Long roleId = request.getData().getLong("roleId");
+		Integer currentType = session.getCurrentRole(request).get().getRoleType();
+		Long currentUser = session.getCurrentUser(request).get().getId();
+		userModel.addUser(loginName, realName, identityCard, password, email, currentType, currentUser, roleId);
 		return ResponseDto.getSuccess();
 	}
 }
