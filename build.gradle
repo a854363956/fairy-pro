@@ -16,9 +16,7 @@ group = 'com.fairy'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-compileJava {
-    options.compilerArgs << '-parameters' 
-}
+
 
 jacocoTestCoverageVerification {
     violationRules {
@@ -56,4 +54,13 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.18'
     apt 'org.projectlombok:lombok:1.16.18'
 	
+}
+
+compileJava {
+  inputs.files configurations.apt
+  outputs.dir 'gen/'
+  options.compilerArgs += [ '-s', 'gen/', '-processorpath', configurations.apt.asPath ]
+  doFirst {
+    mkdir('gen/')
+  }
 }
