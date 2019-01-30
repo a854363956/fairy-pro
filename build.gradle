@@ -16,6 +16,10 @@ group = 'com.fairy'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+compileJava {
+    options.compilerArgs << '-parameters' 
+}
+
 jacocoTestCoverageVerification {
     violationRules {
         rule {

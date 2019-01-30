@@ -10,8 +10,8 @@ import org.springframework.data.repository.query.Param;
 import com.fairy.models.dto.jpa.FairyGroupRole;
 
 public interface RoleGroupModelJpa extends JpaRepository<FairyGroupRole,Long> ,CrudRepository<FairyGroupRole,Long>  {
+	
    @Query(value = "from FairyGroupRole where userId = :userId")
    List<FairyGroupRole> findByUserId(@Param("userId") Long userId);
-   
-   
+
 }

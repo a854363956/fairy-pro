@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Validator;
 
 import com.fairy.models.common.Md5Variant;
 import com.fairy.models.common.SnowflakeIdGenerator;
@@ -43,6 +44,7 @@ public class UserModel {
 	private RoleGroupModelJpa roleGroupModelJpa;
 	@Autowired
 	private RoleModelJpa roleModelJap;
+
 	/**
 	 * 验证当前用户的密码是否正确
 	 * @param loginName 当前登入的账号
@@ -95,6 +97,7 @@ public class UserModel {
 				Long  currentUser,
 				Long roleId
 			) {
+		
 		Optional<FairyBaseRole> roleInfo = roleModelJap.findById(roleId);
 		// 只有类型为1 或者类型为0 的才能进行创建人员,否则表示权限不足
 		if(1 != currentType && 0 != currentType) {

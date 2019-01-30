@@ -36,7 +36,7 @@ public class TestSpringJpa {
 		user.setCreateTime(new Date());
 		user.setEmail("zhangjin0908@hotmail.com");
 		user.setIdentityCard("429005199609080071");
-		user.setLoginName("zhangj");
+		user.setLoginName("test");
 		user.setPassword("zhangj");
 		user.setRealName("张尽");
 		user.setId(snowflakeId.nextId());
