@@ -21,7 +21,6 @@ import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.UserVerifyStatus;
 import com.fairy.models.logic.jpa.SessionModelJpa;
 import com.fairy.models.logic.jpa.UserModelJpa;
-import com.google.common.collect.ImmutableBiMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
