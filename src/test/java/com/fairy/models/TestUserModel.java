@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -23,12 +22,11 @@ import org.springframework.web.context.WebApplicationContext;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.fairy.controllers.user.UserController;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
 import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
-import com.fairy.models.dto.jpa.FairyGroupRole;
+import com.fairy.models.dto.jpa.FairyGrantRole;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.RespSession;
 import com.fairy.models.logic.UserModel.UserVerifyStatus;
@@ -66,7 +64,6 @@ public class TestUserModel {
    }
    
    @Test
-   @Transactional
    public void testLogin() {
 	   int num = sessionModelJpa.findAll().size();
 	   RespSession map =  userModel.login("admin", "admin", "127.0.0.1", 0);
@@ -146,7 +143,7 @@ public class TestUserModel {
 	   json.put( "email", "zhangjin0908@Hotmail.com");
 	   
 	   request.setData(json);
-	   request.setToken("cebf545d5b624a9d93c5587cff366add839e84e60dc04294b62d5a4063521cbd");
+	   request.setToken("7189a0b0c3a5467a910ab65b7c3f52389ba7bf7d0c824040a89875577ecad3ad");
 	   
 	   String text = mockMvc.perform(post("/api/user/addUser").
 			   contentType(MediaType.APPLICATION_JSON_UTF8).
@@ -157,7 +154,7 @@ public class TestUserModel {
 	   
 	   FairyBaseUser fbu = userModelJpa.findUserByLoginName("zhangj").get(0);
 	   
-	   FairyGroupRole fgr = roleGroupModelJpa.findByUserId(fbu.getId()).get(0);
+	   FairyGrantRole fgr = roleGroupModelJpa.findByUserId(fbu.getId()).get(0);
        roleGroupModelJpa.delete(fgr);	   
 	   userModelJpa.delete(fbu);
 	   

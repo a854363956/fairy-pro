@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.fairy.models.dto.jpa.FairyGroupRole;
+import com.fairy.models.dto.jpa.FairyGrantRole;
 
-public interface RoleGroupModelJpa extends JpaRepository<FairyGroupRole,Long> ,CrudRepository<FairyGroupRole,Long>  {
+public interface RoleGroupModelJpa extends JpaRepository<FairyGrantRole,Long> ,CrudRepository<FairyGrantRole,Long>  {
 	
-   @Query(value = "from FairyGroupRole where userId = :userId")
-   List<FairyGroupRole> findByUserId(@Param("userId") Long userId);
+   @Query(value = "from FairyGrantRole where userId = :userId")
+   List<FairyGrantRole> findByUserId(@Param("userId") Long userId);
 
 }

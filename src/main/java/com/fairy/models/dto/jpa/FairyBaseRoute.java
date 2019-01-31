@@ -1,6 +1,5 @@
 package com.fairy.models.dto.jpa;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,24 +12,18 @@ import javax.persistence.TemporalType;
 import lombok.Data;
 
 @Entity
-@Table(name = "fairy_group_role" )
-public @Data class FairyGroupRole implements Serializable {
-	private static final long serialVersionUID = -950862400013919633L;
+@Table(name = "fairy_base_route" )
+public @Data class FairyBaseRoute {
 	@Id
 	@Column(name = "id")
 	private Long id;
-	
-	@Column(name = "user_id")
-	private Long userId;
-	
-	@Column(name = "role_id")
-	private Long roleId;
-	
-	@Column(name = "authorize")
-	private Long authorize;
-	
+	@Column(name = "target")
+	private String target;
+	@Column(name = "remarks")
+	private String remarks;
+	@Column(name = "status")
+	private Integer status;
 	@Temporal(TemporalType.TIMESTAMP) 
-	@Column(name = "create_time")
+	@Column(name = "createTime")
 	private Date createTime;
-	
 }

@@ -3,26 +3,23 @@ package com.fairy.models.logic;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Validator;
 
 import com.fairy.models.common.Md5Variant;
 import com.fairy.models.common.SnowflakeIdGenerator;
 import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
-import com.fairy.models.dto.jpa.FairyGroupRole;
+import com.fairy.models.dto.jpa.FairyGrantRole;
 import com.fairy.models.logic.jpa.RoleGroupModelJpa;
 import com.fairy.models.logic.jpa.RoleModelJpa;
 import com.fairy.models.logic.jpa.SessionModelJpa;
 import com.fairy.models.logic.jpa.UserModelJpa;
-import com.google.common.collect.ImmutableMap;
 
 import lombok.Data;
 
@@ -122,7 +119,7 @@ public class UserModel {
 				userModelJpa.save(fbu);
 				
 				// 创建角色关联信息
-				FairyGroupRole fgr = new FairyGroupRole();
+				FairyGrantRole fgr = new FairyGrantRole();
 				fgr.setId(snowflakeId.nextId());
 				fgr.setCreateTime(new Date());
 				fgr.setAuthorize(currentUser);

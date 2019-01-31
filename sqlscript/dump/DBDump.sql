@@ -42,6 +42,32 @@ INSERT INTO `fairy_base_role` VALUES (0,'超级管理',0,'2019-01-29 13:56:32'),
 UNLOCK TABLES;
 
 --
+-- Table structure for table `fairy_base_route`
+--
+
+DROP TABLE IF EXISTS `fairy_base_route`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `fairy_base_route` (
+  `id` bigint(20) NOT NULL COMMENT '唯一ID',
+  `target` varchar(45) NOT NULL COMMENT '目标的地址',
+  `remarks` varchar(45) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '状态 0 表示正常 1表示禁止',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='基础的URL路由信息,用来做权限管理';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fairy_base_route`
+--
+
+LOCK TABLES `fairy_base_route` WRITE;
+/*!40000 ALTER TABLE `fairy_base_route` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fairy_base_route` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `fairy_base_session`
 --
 
@@ -50,13 +76,14 @@ DROP TABLE IF EXISTS `fairy_base_session`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `fairy_base_session` (
   `id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL COMMENT '当前登入的用户ID',
   `session_code` varchar(64) NOT NULL COMMENT '生成64位的SessionCode防止暴力破解',
   `ip_addr` varchar(45) NOT NULL COMMENT '第一次登入的IP地址',
   `equipment` int(11) NOT NULL COMMENT '登入的设备类型',
   `last_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后登入时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最早登入时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `USER_FK_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户登入的session会话';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -66,7 +93,6 @@ CREATE TABLE `fairy_base_session` (
 
 LOCK TABLES `fairy_base_session` WRITE;
 /*!40000 ALTER TABLE `fairy_base_session` DISABLE KEYS */;
-INSERT INTO `fairy_base_session` VALUES (210954178724364288,0,'cebf545d5b624a9d93c5587cff366add839e84e60dc04294b62d5a4063521cbd','127.0.0.1',0,'2019-01-31 02:56:36','2019-01-31 02:56:36');
 /*!40000 ALTER TABLE `fairy_base_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,13 +127,13 @@ INSERT INTO `fairy_base_user` VALUES (0,'admin','超级管理员','4290051996090
 UNLOCK TABLES;
 
 --
--- Table structure for table `fairy_group_role`
+-- Table structure for table `fairy_grant_role`
 --
 
-DROP TABLE IF EXISTS `fairy_group_role`;
+DROP TABLE IF EXISTS `fairy_grant_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `fairy_group_role` (
+CREATE TABLE `fairy_grant_role` (
   `id` bigint(20) NOT NULL COMMENT '唯一ID',
   `user_id` bigint(20) NOT NULL COMMENT '人员ID信息',
   `role_id` bigint(20) NOT NULL COMMENT '关联的角色信息',
@@ -124,13 +150,13 @@ CREATE TABLE `fairy_group_role` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `fairy_group_role`
+-- Dumping data for table `fairy_grant_role`
 --
 
-LOCK TABLES `fairy_group_role` WRITE;
-/*!40000 ALTER TABLE `fairy_group_role` DISABLE KEYS */;
-INSERT INTO `fairy_group_role` VALUES (0,0,0,0,'2019-01-29 14:13:11');
-/*!40000 ALTER TABLE `fairy_group_role` ENABLE KEYS */;
+LOCK TABLES `fairy_grant_role` WRITE;
+/*!40000 ALTER TABLE `fairy_grant_role` DISABLE KEYS */;
+INSERT INTO `fairy_grant_role` VALUES (0,0,0,0,'2019-01-31 11:48:24');
+/*!40000 ALTER TABLE `fairy_grant_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -142,4 +168,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-31 10:58:55
+-- Dump completed on 2019-01-31 12:00:28
