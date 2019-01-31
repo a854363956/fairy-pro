@@ -12,7 +12,7 @@
 8. mysql 8
 
 
-#### 项目结构描述 
+##### 项目结构描述 
 
 ```bash
 .
@@ -35,8 +35,6 @@
 
 >  如果想拿到用户当前登入的消息,则使用```@Autowired private Session session;``` 通过com.fairy.models.common.Session 可以有一些通用的方法来进行获取用户当前会话中的数据    
 
-
-> 注意: 所有的实体的ID都采用SnowflakeIdGenerator#nextId方法来生成唯一ID 
 
 ##### 统一返回对象
 
@@ -72,6 +70,9 @@ com.fairy.models.dto.RequestDto
 2. /api/user/logout 用户登出接口 
 3. /api/user/addUser 添加用户 
 
+##### 警告!!! 
+
+1. Nginx反向代理后,会导致fairy_base_session表中的ip_addr字段为Nginx的IP地址,而不是真实的IP地址  - 以后调整
 
 
 
