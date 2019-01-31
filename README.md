@@ -14,6 +14,7 @@
 
 #### 项目结构描述 
 
+```
 .
 +-- _src/main/java  项目代码
 +-- _src/main/resources 项目配置文件
@@ -25,6 +26,7 @@
 +-- LICENSE 许可
 +-- README.md 项目说明文件
 +-- settings.gradle gradle构建配置文件
+```
 
 ##### 统一返回对象
 
