@@ -16,16 +16,21 @@
 
 ```bash
 .
-+-- _src/main/java  项目代码
-+-- _src/main/resources 项目配置文件
-+-- _src/test/java  单元测试文件
-+-- _sqlscript 关于数据库的表结构设计文件,以及数据库dump
-+-- build.gradle gradle构建配置文件
-+-- gradlew gradle 构建配置文件
-+-- gradlew.bat gradle构建配置文件
-+-- LICENSE 许可
-+-- README.md 项目说明文件
-+-- settings.gradle gradle构建配置文件
++-- src/main/java  # 项目代码
+|   +-- com.fairy
+|   +-- config # SpringBoot的相关配置的Java Bean
+|   +-- controllers # 用来处理当前控制器
+|   +-- models # 用来处理所有的模块信息
+|       +-- common # 用来处理所有的通用的文件
+|       +-- dto # 所有数据传输实体的对象
+|       |   +-- jpa # 数据库和Java Bean转换的对象
+|       +-- logic # 所有业务的代码
+|           +-- jpa # 所有操作数据库的方法
++-- src/main/resources # 项目配置文件
++-- src/test/java  # 单元测试文件
++-- sqlscript # 关于数据库的表结构设计文件,以及数据库dump
++-- LICENSE # 许可
++-- README.md # 项目说明文件
 ```
 
 ##### 统一返回对象
