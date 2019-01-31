@@ -9,7 +9,22 @@
 5. spring-data-jpa
 6. gradle 版本 5+
 7. java 1.8 
+8. mysql 8
 
+
+#### 项目结构描述 
+
+.
++-- _src/main/java  项目代码
++-- _src/main/resources 项目配置文件
++-- _src/test/java  单元测试文件
++-- _sqlscript 关于数据库的表结构设计文件,以及数据库dump
++-- build.gradle gradle构建配置文件
++-- gradlew gradle 构建配置文件
++-- gradlew.bat gradle构建配置文件
++-- LICENSE 许可
++-- README.md 项目说明文件
++-- settings.gradle gradle构建配置文件
 
 ##### 统一返回对象
 
