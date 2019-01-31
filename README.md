@@ -77,6 +77,7 @@ com.fairy.models.dto.RequestDto
 1. /api/user/login  用户登入接口
 2. /api/user/logout 用户登出接口 
 3. /api/user/addUser 添加用户 
+4. /api/user/delUser 删除用户
 
 ##### 关于URL请求权限控制 
 
