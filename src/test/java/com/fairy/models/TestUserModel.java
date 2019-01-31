@@ -30,7 +30,7 @@ import com.fairy.models.dto.jpa.FairyGrantRole;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.RespSession;
 import com.fairy.models.logic.UserModel.UserVerifyStatus;
-import com.fairy.models.logic.jpa.RoleGroupModelJpa;
+import com.fairy.models.logic.jpa.RoleGrantModelJpa;
 import com.fairy.models.logic.jpa.SessionModelJpa;
 import com.fairy.models.logic.jpa.UserModelJpa;
 
@@ -44,7 +44,7 @@ public class TestUserModel {
    @Autowired
    private SessionModelJpa sessionModelJpa;
    @Autowired
-   private RoleGroupModelJpa roleGroupModelJpa;
+   private RoleGrantModelJpa roleGroupModelJpa;
    @Autowired
    private WebApplicationContext webApplicationContext;
    private MockMvc mockMvc;
