@@ -7,6 +7,9 @@
 3. projectlombok 
 4. spring-boot 
 5. spring-data-jpa
+6. gradle 版本 5+
+7. java 1.8 
+
 
 ##### 统一返回对象
 
@@ -25,6 +28,16 @@ com.fairy.models.dto.ResponseDto
 |200     |数据请求成功
 |500     |服务处理消息报错,错误信息为message中返回的信息
 
+##### 统一的请求对象
+
+com.fairy.models.dto.RequestDto
+
+|字段名称  | 字段类型    | 备注 
+|-----   |-----     |----
+|token   |string    | 当前登入的令牌
+|data    |any       | 返回的数据对象
+
+> 通过token来校验当前数据是否是登入状态,在调用/api/user/login接口,如果登入成功则返回一个64位的token
 
 ##### 用户管理 
 
