@@ -78,9 +78,11 @@ public class TestUserModel {
    @Test
    public void testOLogot() {
 	   sessionModelJpa.findAll().forEach((data)->{
-		   userModel.logout(data.getSessionCode());
+		   if(!"5e7187526bb84317913fdb781cce04ae323debabfe84469ebb873af1cc18113e".equals(data.getSessionCode())) {
+			   userModel.logout(data.getSessionCode());
+		   }
 	   });
-	   assertEquals(sessionModelJpa.findAll().size(), 0);
+	   assertEquals(sessionModelJpa.findAll().size(), 1);
    }
    
    @Test  
@@ -143,7 +145,7 @@ public class TestUserModel {
 	   json.put( "email", "zhangjin0908@Hotmail.com");
 	   
 	   request.setData(json);
-	   request.setToken("7189a0b0c3a5467a910ab65b7c3f52389ba7bf7d0c824040a89875577ecad3ad");
+	   request.setToken("5e7187526bb84317913fdb781cce04ae323debabfe84469ebb873af1cc18113e");
 	   
 	   String text = mockMvc.perform(post("/api/user/addUser").
 			   contentType(MediaType.APPLICATION_JSON_UTF8).
