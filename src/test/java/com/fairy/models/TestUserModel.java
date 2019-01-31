@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fairy.controllers.user.UserController;
+import com.fairy.models.common.Md5Variant;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
 import com.fairy.models.dto.jpa.FairyBaseSession;
@@ -68,7 +69,7 @@ public class TestUserModel {
 	   json.put( "loginName","zhangj");
 	   json.put( "realName","张尽");
 	   json.put( "identityCard","429005199609080071");
-	   json.put( "password","admin");
+	   json.put( "password",Md5Variant.strongEncryption("admin"));
 	   json.put( "roleId",1);
 	   json.put( "email", "zhangjin0908@Hotmail.com");
 	   
