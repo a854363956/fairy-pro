@@ -33,7 +33,10 @@
 +-- README.md                       # 项目说明文件
 ```
 
->  如果想拿到用户当前登入的消息,则使用```@Autowired private Session session;``` 通过com.fairy.models.common.Session 可以有一些通用的方法来进行获取
+>  如果想拿到用户当前登入的消息,则使用```@Autowired private Session session;``` 通过com.fairy.models.common.Session 可以有一些通用的方法来进行获取用户当前会话中的数据    
+
+
+> 注意: 所有的实体的ID都采用SnowflakeIdGenerator#nextId方法来生成唯一ID 
 
 ##### 统一返回对象
 
