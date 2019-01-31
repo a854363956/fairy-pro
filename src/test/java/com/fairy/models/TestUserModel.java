@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -22,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.fairy.models.common.SnowflakeIdGenerator;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
 import com.fairy.models.dto.jpa.FairyBaseSession;
@@ -48,6 +50,9 @@ public class TestUserModel {
    @Autowired
    private WebApplicationContext webApplicationContext;
    private MockMvc mockMvc;
+   @Autowired
+   private SnowflakeIdGenerator snowflakeId;
+   
    @Before      
    public void setUp(){      
 	   mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -159,7 +164,33 @@ public class TestUserModel {
 	   FairyGrantRole fgr = roleGroupModelJpa.findByUserId(fbu.getId()).get(0);
        roleGroupModelJpa.delete(fgr);	   
 	   userModelJpa.delete(fbu);
+   }
+   
+   @Test
+   public void testDelUserController() throws UnsupportedEncodingException, Exception {
+		FairyBaseUser user = new FairyBaseUser();
+		user.setCreateTime(new Date());
+		user.setEmail("zhangjin0908@hotmail.com");
+		user.setIdentityCard("429005199609080071");
+		user.setLoginName("delUser");
+		user.setPassword("zhangj");
+		user.setRealName("张尽");
+		user.setId(snowflakeId.nextId());
+		userModelJpa.save(user);
 	   
+	   
+	   RequestDto<JSONObject> request = new RequestDto<JSONObject>();
+	   JSONObject json = new JSONObject();
+	   request.setData(json);
+	   json.put("userId", user.getId());
+	   
+	   String text = mockMvc.perform(post("/api/user/delUser").
+			   contentType(MediaType.APPLICATION_JSON_UTF8).
+			   content(JSON.toJSONString(request))) .andReturn().getResponse().getContentAsString(); 
+	   ResponseDto<String> resp = JSON.parseObject(text,new TypeReference<ResponseDto<String>>() {});
+	   int status = resp.getStatus();
+	   assertEquals(200,status);
+	   assertEquals(0, userModelJpa.findUserByLoginName("delUser").size());
    }
 
 }

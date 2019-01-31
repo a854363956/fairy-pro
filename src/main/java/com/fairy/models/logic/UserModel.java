@@ -98,10 +98,6 @@ public class UserModel {
 			) {
 		
 		Optional<FairyBaseRole> roleInfo = roleModelJap.findById(roleId);
-		// 只有类型为1 或者类型为0 的才能进行创建人员,否则表示权限不足
-		if(1 != currentType && 0 != currentType) {
-			throw new RuntimeException("Permission Denied");
-		}
 		if(roleInfo.isPresent()) {
 			if(roleInfo.get().getRoleType() <= currentType) {
 				throw new RuntimeException(String.format("Insufficient permissions, current permissions [ %s ], target permissions [ %s ].", currentType,roleInfo));
@@ -143,6 +139,26 @@ public class UserModel {
 		}
 		
 	}
+	
+	public void delUser(Long userId,Integer currentRoleType) {
+		Optional<FairyBaseUser> user = userModelJpa.findById(userId);
+		if(user.isPresent()) {
+			Optional<FairyBaseSession> sess = sessionModelJpa.findByUserId(userId);
+			if(sess.isPresent()) {
+				throw new RuntimeException("The user is unable to delete the operation, please wait for the user to quit");
+			}else {
+				List<FairyGrantRole> roleGrant = roleGroupModelJpa.findByUserId(userId);
+				roleGrant.forEach((data)->{
+					roleGroupModelJpa.delete(data);
+				});
+				
+				userModelJpa.delete(user.get());
+			}
+		}else {
+			throw new RuntimeException(String.format("User id does not exist. [ %s ]", userId));
+		}
+	}
+	
 	/**
 	 *   用户登入
 	 * @param loginName 登入名称
