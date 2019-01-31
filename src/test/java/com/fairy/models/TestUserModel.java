@@ -16,9 +16,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.fairy.controllers.user.UserController;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
+import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
+import com.fairy.models.dto.jpa.FairyGroupRole;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.UserVerifyStatus;
+import com.fairy.models.logic.jpa.RoleGroupModelJpa;
 import com.fairy.models.logic.jpa.SessionModelJpa;
 import com.fairy.models.logic.jpa.UserModelJpa;
 
@@ -33,6 +36,8 @@ public class TestUserModel {
    private SessionModelJpa sessionModelJpa;
    @Autowired
    private UserController userController;
+   @Autowired
+   private RoleGroupModelJpa roleGroupModelJpa;
    @Test
    public void testIsHaveUser() {
 	   String loginName = "notHaveUser";
@@ -49,11 +54,13 @@ public class TestUserModel {
 	   assertEquals(UserVerifyStatus.SUCCESS, map.get("status") );
 	   assertEquals(num+1,sessionModelJpa.findAll().size());
 	   System.out.println(JSON.toJSONString(map));
+	   FairyBaseSession fbs = sessionModelJpa.findBySessionCode(map.get("sessionCode").toString()).get();
+	   sessionModelJpa.delete(fbs);
    }
    
 
    
-   // @Test
+   @Test
    public void testAddUser() throws Exception {
 	   RequestDto<JSONObject> request = new RequestDto<JSONObject>();
 	   
@@ -66,10 +73,17 @@ public class TestUserModel {
 	   json.put( "email", "zhangjin0908@Hotmail.com");
 	   
 	   request.setData(json);
-	   request.setToken("583db9ce5df34fe6ae833fdd4590ad6815cbb4fcd1fc4430b5b04cf1a360684b");
+	   request.setToken("1ca441059b9f4d749d6937f94672dd034d70c280808b4ee48e22709bb813d9ff");
 	   ResponseDto<String> resp = userController.addUser(request);
 	   int status = resp.getStatus();
 	   assertEquals(200,status);
+	   
+	   FairyBaseUser fbu = userModelJpa.findUserByLoginName("zhangj").get(0);
+	   
+	   FairyGroupRole fgr = roleGroupModelJpa.findByUserId(fbu.getId()).get(0);
+       roleGroupModelJpa.delete(fgr);	   
+	   userModelJpa.delete(fbu);
+	   
    }
    @Test
    public void testOLogot() {

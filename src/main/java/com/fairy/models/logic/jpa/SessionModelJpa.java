@@ -1,5 +1,7 @@
 package com.fairy.models.logic.jpa;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +14,6 @@ public interface SessionModelJpa extends JpaRepository<FairyBaseSession,Long> ,C
 	@Modifying
 	@Query("delete from FairyBaseSession where sessionCode=:sessionCode")
 	void deleteBySessionCode(@Param("sessionCode") String sessionCode);
+	@Query("from FairyBaseSession where sessionCode=:sessionCode")
+	Optional<FairyBaseSession> findBySessionCode(@Param("sessionCode") String sessionCode);
 }
