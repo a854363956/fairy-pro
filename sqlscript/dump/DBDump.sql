@@ -66,7 +66,6 @@ CREATE TABLE `fairy_base_session` (
 
 LOCK TABLES `fairy_base_session` WRITE;
 /*!40000 ALTER TABLE `fairy_base_session` DISABLE KEYS */;
-INSERT INTO `fairy_base_session` VALUES (210294173322969088,0,'583db9ce5df34fe6ae833fdd4590ad6815cbb4fcd1fc4430b5b04cf1a360684b','127.0.0.1',0,'2019-01-29 07:13:58','2019-01-29 07:13:58');
 /*!40000 ALTER TABLE `fairy_base_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,4 +141,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-30 11:54:36
+-- Dump completed on 2019-01-31 10:22:46
