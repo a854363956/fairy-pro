@@ -100,7 +100,6 @@ public class TestUserModel {
 	   
 	   ResponseDto<RespSession> resp = JSON.parseObject(text,new TypeReference<ResponseDto<RespSession>>() {});
 	   
-	   
 	   RequestDto<JSONObject> req = new  RequestDto<JSONObject>();
 	   req.setToken(resp.getData().getSessionCode());
 	   
@@ -110,6 +109,7 @@ public class TestUserModel {
 	   
 	   ResponseDto<String> rs = JSON.parseObject(jtext,new TypeReference<ResponseDto<String>>() {});
 	   assertEquals(200,(int)rs.getStatus());
+	   
    }
    
    @Test

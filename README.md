@@ -78,6 +78,16 @@ com.fairy.models.dto.RequestDto
 2. /api/user/logout 用户登出接口 
 3. /api/user/addUser 添加用户 
 
+##### 关于URL请求权限控制 
+
+1. fairy_base_route 维护路由的基础信息
+2. fairy_grant_route 维护路由信息授权表 
+
+![路由图片](./doc/img/urlRoute.png)
+
+> fairy_base_route.route_type 表示当前路由中,这个路由所属的权限,0 表示超级管理员 1表示系统管理员 0表示普通用户,对于敏感数据而言的接口应当只运行超级管理员来进行访问 
+
+
 ##### 警告!!! 
 
 1. Nginx反向代理后,会导致fairy_base_session表中的ip_addr字段为Nginx的IP地址,而不是真实的IP地址  - 以后调整
