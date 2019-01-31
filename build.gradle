@@ -51,16 +51,4 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
-    compileOnly 'org.projectlombok:lombok:1.16.18'
-    apt 'org.projectlombok:lombok:1.16.18'
-	
-}
-
-compileJava {
-  inputs.files configurations.apt
-  outputs.dir 'gen/'
-  options.compilerArgs += [ '-s', 'gen/', '-processorpath', configurations.apt.asPath ]
-  doFirst {
-    mkdir('gen/')
-  }
 }

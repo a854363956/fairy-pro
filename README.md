@@ -26,8 +26,6 @@ com.fairy.models.dto.ResponseDto
 |500     |服务处理消息报错,错误信息为message中返回的信息
 
 
-
-
 ##### 用户管理 
 
 1. /api/user/login  用户登入接口

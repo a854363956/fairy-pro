@@ -53,7 +53,7 @@ public class TestUserModel {
    
 
    
-   @Test
+   // @Test
    public void testAddUser() throws Exception {
 	   RequestDto<JSONObject> request = new RequestDto<JSONObject>();
 	   
