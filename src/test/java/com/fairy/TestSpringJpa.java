@@ -44,7 +44,7 @@ public class TestSpringJpa {
 		
 		assertEquals(userModelJpa.findUserByLoginName("test").size(),1);
 		
-		System.out.println(JSON.toJSONString(userModelJpa.findUserByLoginName("zhangj").get(0)));
+		System.out.println(JSON.toJSONString(userModelJpa.findUserByLoginName("test").get(0)));
 		userModelJpa.delete(user);
 	}
 	
