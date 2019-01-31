@@ -1,5 +1,7 @@
 package com.fairy.controllers.user;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import com.fairy.models.common.Session;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
 import com.fairy.models.logic.UserModel;
+import com.fairy.models.logic.UserModel.RespSession;
 
 @RestController
 @RequestMapping(value ="/api/user", method=RequestMethod.POST )
@@ -24,7 +27,7 @@ public class UserController {
 	private Session session;
 	
 	@RequestMapping("/login")
-	public ResponseDto<Object> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
+	public ResponseDto<RespSession> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
 		JSONObject datas = request.getData();
 		String loginName = datas.getString("loginName");
 		String password = datas.getString("password");

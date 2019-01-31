@@ -3,8 +3,11 @@ package com.fairy.models;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +30,7 @@ import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
 import com.fairy.models.dto.jpa.FairyGroupRole;
 import com.fairy.models.logic.UserModel;
+import com.fairy.models.logic.UserModel.RespSession;
 import com.fairy.models.logic.UserModel.UserVerifyStatus;
 import com.fairy.models.logic.jpa.RoleGroupModelJpa;
 import com.fairy.models.logic.jpa.SessionModelJpa;
@@ -62,20 +66,75 @@ public class TestUserModel {
    }
    
    @Test
+   @Transactional
    public void testLogin() {
 	   int num = sessionModelJpa.findAll().size();
-	   Map<String, Object> map =  userModel.login("admin", "admin", "127.0.0.1", 0);
-	   assertEquals(UserVerifyStatus.SUCCESS, map.get("status") );
+	   RespSession map =  userModel.login("admin", "admin", "127.0.0.1", 0);
+	   assertEquals(UserVerifyStatus.SUCCESS,map.getStatus());
 	   assertEquals(num+1,sessionModelJpa.findAll().size());
 	   System.out.println(JSON.toJSONString(map));
-	   FairyBaseSession fbs = sessionModelJpa.findBySessionCode(map.get("sessionCode").toString()).get();
+	   FairyBaseSession fbs = sessionModelJpa.findBySessionCode(map.getSessionCode()).get();
 	   sessionModelJpa.delete(fbs);
    }
    
-
    
    @Test
-   public void testAddUser() throws Exception {
+   public void testOLogot() {
+	   sessionModelJpa.findAll().forEach((data)->{
+		   userModel.logout(data.getSessionCode());
+	   });
+	   assertEquals(sessionModelJpa.findAll().size(), 0);
+   }
+   
+   @Test  
+   public void testOLogotController() throws UnsupportedEncodingException, Exception {
+	   RequestDto<JSONObject> request = new  RequestDto<JSONObject>();
+	   JSONObject json = new JSONObject();
+	   json.put("loginName", "admin");
+	   json.put("password", "admin");
+	   json.put("equipment", 0);
+	   request.setData(json);
+	   
+	   String text = mockMvc.perform(post("/api/user/login").
+			   contentType(MediaType.APPLICATION_JSON_UTF8).
+			   content(JSON.toJSONString(request))) .andReturn().getResponse().getContentAsString(); 
+	   
+	   ResponseDto<RespSession> resp = JSON.parseObject(text,new TypeReference<ResponseDto<RespSession>>() {});
+	   
+	   
+	   RequestDto<JSONObject> req = new  RequestDto<JSONObject>();
+	   req.setToken(resp.getData().getSessionCode());
+	   
+	   String jtext = mockMvc.perform(post("/api/user/logout").
+			   contentType(MediaType.APPLICATION_JSON_UTF8).
+			   content(JSON.toJSONString(req))) .andReturn().getResponse().getContentAsString(); 
+	   
+	   ResponseDto<String> rs = JSON.parseObject(jtext,new TypeReference<ResponseDto<String>>() {});
+	   assertEquals(200,(int)rs.getStatus());
+   }
+   
+   @Test
+   @Transactional
+   public void testLoginController() throws UnsupportedEncodingException, Exception {
+	   RequestDto<JSONObject> request = new  RequestDto<JSONObject>();
+	   JSONObject json = new JSONObject();
+	   json.put("loginName", "admin");
+	   json.put("password", "admin");
+	   json.put("equipment", 0);
+	   request.setData(json);
+	   
+	   String text = mockMvc.perform(post("/api/user/login").
+			   contentType(MediaType.APPLICATION_JSON_UTF8).
+			   content(JSON.toJSONString(request))) .andReturn().getResponse().getContentAsString(); 
+	   
+	   ResponseDto<RespSession> resp = JSON.parseObject(text,new TypeReference<ResponseDto<RespSession>>() {});
+	   assertEquals(200,(int)resp.getStatus());
+	   sessionModelJpa.deleteBySessionCode(resp.getData().getSessionCode());
+	   
+   }
+   
+   @Test
+   public void testAddUserController() throws Exception {
 	   RequestDto<JSONObject> request = new RequestDto<JSONObject>();
 	   
 	   JSONObject json = new JSONObject();
@@ -103,11 +162,5 @@ public class TestUserModel {
 	   userModelJpa.delete(fbu);
 	   
    }
-   @Test
-   public void testOLogot() {
-	   sessionModelJpa.findAll().forEach((data)->{
-		   userModel.logout(data.getSessionCode());
-	   });
-	   assertEquals(sessionModelJpa.findAll().size(), 0);
-   }
+
 }

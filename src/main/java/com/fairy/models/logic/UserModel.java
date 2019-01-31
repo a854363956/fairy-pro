@@ -24,6 +24,8 @@ import com.fairy.models.logic.jpa.SessionModelJpa;
 import com.fairy.models.logic.jpa.UserModelJpa;
 import com.google.common.collect.ImmutableMap;
 
+import lombok.Data;
+
 
 @Service
 public class UserModel {
@@ -134,6 +136,16 @@ public class UserModel {
 			throw new RuntimeException(String.format("Of course, the role does not exist. Please check it.[ %s ]", roleId));
 		}
 	}
+	public @Data static class RespSession{
+		private String sessionCode;
+		private UserVerifyStatus status;
+		public RespSession(String sessionCode, UserVerifyStatus status) {
+			super();
+			this.sessionCode = sessionCode;
+			this.status = status;
+		}
+		
+	}
 	/**
 	 *   用户登入
 	 * @param loginName 登入名称
@@ -142,7 +154,7 @@ public class UserModel {
 	 * @param equipment 登入的设备类型
 	 * @return 如果登入成功,返回sessionCode
 	 */
-	public Map<String, Object> login(String loginName,String password,String ipAddr,Integer equipment) {
+	public RespSession login(String loginName,String password,String ipAddr,Integer equipment) {
 		List<FairyBaseUser> users =  userModelJpa.findUserByLoginName(loginName);
 		UserVerifyStatus uvs = verify(users,loginName,password);
 		switch (uvs) {
@@ -154,25 +166,25 @@ public class UserModel {
 					equipment
 					);
 			sessionModelJpa.save(fbs);
-			return ImmutableMap.of(
-					"sessionCode",fbs.getSessionCode(),
-					"status",UserVerifyStatus.SUCCESS
+			return new RespSession(
+						fbs.getSessionCode(),
+						UserVerifyStatus.SUCCESS
 					);
 		case WRONG_PASSWORD:
-			return ImmutableMap.of(
-					"status",UserVerifyStatus.WRONG_PASSWORD
+			return new RespSession(
+					"",UserVerifyStatus.WRONG_PASSWORD
 					);
 		case USER_DOES_NOT_EXIST:
-			return ImmutableMap.of(
-					"status",UserVerifyStatus.USER_DOES_NOT_EXIST
+			return new RespSession(
+					"",UserVerifyStatus.USER_DOES_NOT_EXIST
 					);
 		case UNMAINTAINED_ROLES:
-			return ImmutableMap.of(
-					"status",UserVerifyStatus.USER_DOES_NOT_EXIST
+			return new RespSession(
+					"",UserVerifyStatus.USER_DOES_NOT_EXIST
 					);
 		default:
-			return ImmutableMap.of(
-					"status",uvs
+			return new RespSession(
+					"",uvs
 					);
 		}
 	}

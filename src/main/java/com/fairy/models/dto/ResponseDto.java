@@ -16,8 +16,8 @@ public @Data class ResponseDto<T> implements Serializable {
 		re.setData("Data operation completed.");
 		return re;
 	}
-	public static ResponseDto<Object> getSuccess(Object object){
-		ResponseDto<Object> re = new ResponseDto<Object>();
+	public static <T> ResponseDto<T> getSuccess(T object){
+		ResponseDto<T> re = new ResponseDto<T>();
 		re.setStatus(200);
 		re.setData(object);
 		return re;
