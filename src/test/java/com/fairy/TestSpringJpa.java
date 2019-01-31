@@ -42,7 +42,7 @@ public class TestSpringJpa {
 		user.setId(snowflakeId.nextId());
 		userModelJpa.save(user);
 		
-		assertEquals(userModelJpa.findUserByLoginName("zhangj").size(),1);
+		assertEquals(userModelJpa.findUserByLoginName("test").size(),1);
 		
 		System.out.println(JSON.toJSONString(userModelJpa.findUserByLoginName("zhangj").get(0)));
 		userModelJpa.delete(user);
