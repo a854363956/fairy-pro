@@ -14,7 +14,7 @@
 
 #### 项目结构描述 
 
-```
+```bash
 .
 +-- _src/main/java  项目代码
 +-- _src/main/resources 项目配置文件
