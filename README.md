@@ -33,6 +33,8 @@
 +-- README.md                       # 项目说明文件
 ```
 
+>  如果想拿到用户当前登入的消息,则使用```@Autowired private Session session;``` 通过com.fairy.models.common.Session 可以有一些通用的方法来进行获取
+
 ##### 统一返回对象
 
 com.fairy.models.dto.ResponseDto  

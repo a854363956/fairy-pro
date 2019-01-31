@@ -19,11 +19,10 @@ import com.fairy.models.logic.UserModel.RespSession;
 @RestController
 @RequestMapping(value ="/api/user", method=RequestMethod.POST )
 public class UserController {
-	@Autowired
-	private UserModel userModel;
 	
-	@Autowired
-	private Session session;
+	@Autowired private UserModel userModel;
+	
+	@Autowired private Session session;
 	
 	@RequestMapping("/login")
 	public ResponseDto<RespSession> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
