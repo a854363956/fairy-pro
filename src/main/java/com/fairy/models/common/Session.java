@@ -10,7 +10,7 @@ import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
-import com.fairy.models.logic.jpa.RoleGroupModelJpa;
+import com.fairy.models.logic.jpa.RoleGrantModelJpa;
 import com.fairy.models.logic.jpa.RoleModelJpa;
 import com.fairy.models.logic.jpa.SessionModelJpa;
 import com.fairy.models.logic.jpa.UserModelJpa;
@@ -20,7 +20,7 @@ public class Session {
 	@Autowired
 	private SessionModelJpa sessionModelJpa;
 	@Autowired
-	private RoleGroupModelJpa roleGroupModelJpa;
+	private RoleGrantModelJpa roleGroupModelJpa;
 	@Autowired
 	private RoleModelJpa roleModelJpa;
 	@Autowired
