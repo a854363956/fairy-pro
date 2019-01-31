@@ -92,39 +92,32 @@ public class UserModel {
 				String identityCard,
 				String password,
 				String email,
-				Integer currentType,
 				Long  currentUser,
 				Long roleId
 			) {
 		
 		Optional<FairyBaseRole> roleInfo = roleModelJap.findById(roleId);
 		if(roleInfo.isPresent()) {
-			if(roleInfo.get().getRoleType() <= currentType) {
-				throw new RuntimeException(String.format("Insufficient permissions, current permissions [ %s ], target permissions [ %s ].", currentType,roleInfo));
-			}else {
-				
-				// 创建人员信息
-				FairyBaseUser fbu = new FairyBaseUser();
-				fbu.setCreateTime(new Date());
-				fbu.setEmail(email);
-				fbu.setId(snowflakeId.nextId());
-				fbu.setIdentityCard(identityCard);
-				fbu.setLoginName(loginName);
-				fbu.setPassword(Md5Variant.strongEncryption(password));
-				fbu.setRealName(realName);
-				userModelJpa.save(fbu);
-				
-				// 创建角色关联信息
-				FairyGrantRole fgr = new FairyGrantRole();
-				fgr.setId(snowflakeId.nextId());
-				fgr.setCreateTime(new Date());
-				fgr.setAuthorize(currentUser);
-				fgr.setRoleId(roleId);
-				fgr.setUserId(fbu.getId());
-				roleGroupModelJpa.save(fgr);
-				
-				return;
-			}
+			// 创建人员信息
+			FairyBaseUser fbu = new FairyBaseUser();
+			fbu.setCreateTime(new Date());
+			fbu.setEmail(email);
+			fbu.setId(snowflakeId.nextId());
+			fbu.setIdentityCard(identityCard);
+			fbu.setLoginName(loginName);
+			fbu.setPassword(Md5Variant.strongEncryption(password));
+			fbu.setRealName(realName);
+			userModelJpa.save(fbu);
+			
+			// 创建角色关联信息
+			FairyGrantRole fgr = new FairyGrantRole();
+			fgr.setId(snowflakeId.nextId());
+			fgr.setCreateTime(new Date());
+			fgr.setAuthorize(currentUser);
+			fgr.setRoleId(roleId);
+			fgr.setUserId(fbu.getId());
+			roleGroupModelJpa.save(fgr);
+			return;
 		}else {
 			throw new RuntimeException(String.format("Of course, the role does not exist. Please check it.[ %s ]", roleId));
 		}

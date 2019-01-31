@@ -83,6 +83,7 @@ public class TestUserModel {
    @Test
    public void testOLogot() {
 	   sessionModelJpa.findAll().forEach((data)->{
+		   // 此数据保留,用来测试添加用户
 		   if(!"5e7187526bb84317913fdb781cce04ae323debabfe84469ebb873af1cc18113e".equals(data.getSessionCode())) {
 			   userModel.logout(data.getSessionCode());
 		   }
