@@ -25,8 +25,4 @@ spring:
 snowflake:
    workerId: 0
    dataCenterId: 0
-#  data:
-#    mongodb:
-#      host: localhost
-#      port: 27017
-#      database: fairy-pro
+
