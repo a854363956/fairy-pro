@@ -1,20 +1,26 @@
 package com.fairy.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.fairy.controllers.user.UserController;
-import com.fairy.models.common.Md5Variant;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
 import com.fairy.models.dto.jpa.FairyBaseSession;
@@ -36,9 +42,16 @@ public class TestUserModel {
    @Autowired
    private SessionModelJpa sessionModelJpa;
    @Autowired
-   private UserController userController;
-   @Autowired
    private RoleGroupModelJpa roleGroupModelJpa;
+   @Autowired
+   private WebApplicationContext webApplicationContext;
+   private MockMvc mockMvc;
+   @Before      
+   public void setUp(){      
+	   mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+               .build();
+   }     
+   
    @Test
    public void testIsHaveUser() {
 	   String loginName = "notHaveUser";
@@ -69,13 +82,17 @@ public class TestUserModel {
 	   json.put( "loginName","zhangj");
 	   json.put( "realName","张尽");
 	   json.put( "identityCard","429005199609080071");
-	   json.put( "password",Md5Variant.strongEncryption("admin"));
+	   json.put( "password","admin");
 	   json.put( "roleId",1);
 	   json.put( "email", "zhangjin0908@Hotmail.com");
 	   
 	   request.setData(json);
-	   request.setToken("1ca441059b9f4d749d6937f94672dd034d70c280808b4ee48e22709bb813d9ff");
-	   ResponseDto<String> resp = userController.addUser(request);
+	   request.setToken("cebf545d5b624a9d93c5587cff366add839e84e60dc04294b62d5a4063521cbd");
+	   
+	   String text = mockMvc.perform(post("/api/user/addUser").
+			   contentType(MediaType.APPLICATION_JSON_UTF8).
+			   content(JSON.toJSONString(request))) .andReturn().getResponse().getContentAsString(); 
+	   ResponseDto<String> resp = JSON.parseObject(text,new TypeReference<ResponseDto<String>>() {});
 	   int status = resp.getStatus();
 	   assertEquals(200,status);
 	   
