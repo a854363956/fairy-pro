@@ -19,6 +19,7 @@
 +-- src/main/java                   # 项目代码
 |   +-- com.fairy
 |       +-- config                  # SpringBoot的相关配置的Java Bean
+|           +-- interfaces          # 通常用来处理配置文件里面需要的接口
 |       +-- controllers             # 用来处理当前控制器
 |       +-- models                  # 用来处理所有的模块信息
 |           +-- common              # 用来处理所有的通用的文件
@@ -29,7 +30,7 @@
 +-- src/main/resources              # 项目配置文件
 +-- src/test/java                   # 单元测试文件
 +-- sqlscript                       # 关于数据库的表结构设计文件,以及数据库dump
-+-- LICENSE                         # 许可
++-- LICENSE                         # 许可说明 
 +-- README.md                       # 项目说明文件
 ```
 
