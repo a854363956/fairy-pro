@@ -8,7 +8,7 @@ import com.fairy.models.dto.RequestDto;
 import lombok.Data;
 
 public interface FairyFilter {
-	public static @Data class Result{
+	public @Data class Result{
 		private boolean status;
 		private String message;
 		private String path;

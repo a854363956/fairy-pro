@@ -16,5 +16,4 @@ public class StreamUtil {
     public static String readBytes(BufferedReader bufferedReader) throws IOException {
     	return CharStreams.toString(bufferedReader);
 	}
-  
 }
