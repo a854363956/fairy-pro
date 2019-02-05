@@ -8,7 +8,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.ApplicationContext;
@@ -45,7 +44,9 @@ abstract public class GlobalRouteFilter implements Filter {
 				ResponseDto<Result> resp = new ResponseDto<Result>();
 				resp.setData(result);
 				resp.setStatus(510);
-				resp.setMessage(String.format("request path [ %s ] error...", result.getPath()));
+				if(result.getPath() !=  null ) {
+					resp.setMessage(String.format("request path [ %s ] error...", result.getPath()));
+				}
 				response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charsets.UTF_8));
 				return ;
 			}
