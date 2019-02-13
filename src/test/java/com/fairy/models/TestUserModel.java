@@ -149,7 +149,6 @@ public class TestUserModel {
 	   json.put( "password","admin");
 	   json.put( "roleId",1);
 	   json.put( "email", "zhangjin0908@Hotmail.com");
-	   
 	   request.setData(json);
 	   request.setToken("5e7187526bb84317913fdb781cce04ae323debabfe84469ebb873af1cc18113e");
 	   

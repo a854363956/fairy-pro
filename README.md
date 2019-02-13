@@ -12,6 +12,8 @@
 8. mysql 8
 
 
+> 所有对字符串的格式统一为UTF-8 ,如果是在代码中编写的统一使用Charsets.UTF_8  
+
 ##### 项目结构描述 
 
 ```bash
@@ -19,6 +21,7 @@
 +-- src/main/java                   # 项目代码
 |   +-- com.fairy
 |       +-- config                  # SpringBoot的相关配置的Java Bean
+|           +-- interfaces          # 通常用来处理配置文件里面需要的接口
 |       +-- controllers             # 用来处理当前控制器
 |       +-- models                  # 用来处理所有的模块信息
 |           +-- common              # 用来处理所有的通用的文件
@@ -29,7 +32,7 @@
 +-- src/main/resources              # 项目配置文件
 +-- src/test/java                   # 单元测试文件
 +-- sqlscript                       # 关于数据库的表结构设计文件,以及数据库dump
-+-- LICENSE                         # 许可
++-- LICENSE                         # 许可说明 
 +-- README.md                       # 项目说明文件
 ```
 
@@ -60,6 +63,7 @@ com.fairy.models.dto.ResponseDto
 |-----   |----
 |200     |数据请求成功
 |500     |服务处理消息报错,错误信息为message中返回的信息
+|510     |表示此请求在被拦截器验证的失败了
 
 ##### 统一的请求对象
 
