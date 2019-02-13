@@ -52,7 +52,15 @@ public class Session {
 	public Optional<FairyBaseRole> getCurrentRole(RequestDto<?> request) {
 		return getCurrentRole(request.getToken());
 	}
-
+	public Optional<FairyBaseRole> getCurrentRole(String token) {
+		Long userId = getCurrentUser(token).get().getId();
+		FairyBaseRole roleQuery = new FairyBaseRole();
+		Long roeId = roleGroupModelJpa.findByUserId(userId).get(0).getRoleId();
+		roleQuery.setId(roeId);
+		Example<FairyBaseRole> example = Example.of(roleQuery);
+		example.getMatcher().withMatcher("id", match -> match.exact());
+		return roleModelJpa.findOne(example);
+	}
 	public Optional<FairyBaseSession> getCurrentSession(RequestDto<?> request) {
 		return getCurrentSession(request.getToken());
 	}
@@ -65,13 +73,5 @@ public class Session {
 		return sessionModelJpa.findOne(example);
 	}
 
-	public Optional<FairyBaseRole> getCurrentRole(String token) {
-		Long userId = getCurrentUser(token).get().getId();
-		FairyBaseRole roleQuery = new FairyBaseRole();
-		Long roeId = roleGroupModelJpa.findByUserId(userId).get(0).getRoleId();
-		roleQuery.setId(roeId);
-		Example<FairyBaseRole> example = Example.of(roleQuery);
-		example.getMatcher().withMatcher("id", match -> match.exact());
-		return roleModelJpa.findOne(example);
-	}
+
 }
