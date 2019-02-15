@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -32,9 +34,9 @@ import com.fairy.models.dto.jpa.FairyGrantRole;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.RespSession;
 import com.fairy.models.logic.UserModel.UserVerifyStatus;
-import com.fairy.models.logic.jpa.RoleGrantModelJpa;
-import com.fairy.models.logic.jpa.SessionModelJpa;
-import com.fairy.models.logic.jpa.UserModelJpa;
+import com.fairy.models.logic.jpa.GrantRoleModelJpa;
+import com.fairy.models.logic.jpa.BaseSessionModelJpa;
+import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,11 +44,11 @@ public class TestUserModel {
    @Autowired
    private UserModel userModel;
    @Autowired
-   private UserModelJpa userModelJpa;
+   private BaseUserModelJpa userModelJpa;
    @Autowired
-   private SessionModelJpa sessionModelJpa;
+   private BaseSessionModelJpa sessionModelJpa;
    @Autowired
-   private RoleGrantModelJpa roleGroupModelJpa;
+   private GrantRoleModelJpa roleGroupModelJpa;
    @Autowired
    private WebApplicationContext webApplicationContext;
    private MockMvc mockMvc;
@@ -79,7 +81,12 @@ public class TestUserModel {
 	   sessionModelJpa.delete(fbs);
    }
    
-   
+   @Test
+   public void testFindUserInfo() {
+	   Optional<Map<String, Object>> list = userModelJpa.findUserInfo(0L);
+	   assertEquals(list.isPresent(), true);
+	   System.out.println(JSON.toJSONString(list));
+   }
    @Test
    public void testOLogot() {
 	   sessionModelJpa.findAll().forEach((data)->{
@@ -138,6 +145,38 @@ public class TestUserModel {
 	   
    }
    
+   @Test
+   public void testGetCurrentUser() throws UnsupportedEncodingException, Exception {
+	   RequestDto<JSONObject> request = new  RequestDto<JSONObject>();
+	   JSONObject json = new JSONObject();
+	   json.put("loginName", "admin");
+	   json.put("password", "admin");
+	   json.put("equipment", 0);
+	   request.setData(json);
+	   
+	   String text = mockMvc.perform(post("/api/user/login").
+			   contentType(MediaType.APPLICATION_JSON_UTF8).
+			   content(JSON.toJSONString(request))) .andReturn().getResponse().getContentAsString(); 
+	   
+	   ResponseDto<RespSession> resp = JSON.parseObject(text,new TypeReference<ResponseDto<RespSession>>() {});
+	   assertEquals(200,(int)resp.getStatus());
+	   
+	   
+	   RequestDto<JSONObject> jrequest = new  RequestDto<JSONObject>();
+	   JSONObject jjson = new JSONObject();
+	   jrequest.setData(jjson);
+	   jrequest.setToken(resp.getData().getSessionCode());
+	   String jtext = mockMvc.perform(post("/api/user/getCurrentUser").
+			   contentType(MediaType.APPLICATION_JSON_UTF8).
+			   content(JSON.toJSONString(jrequest))) .andReturn().getResponse().getContentAsString(); 
+	   
+	   ResponseDto<Map<String,Object>> jresp = JSON.parseObject(jtext,new TypeReference<ResponseDto<Map<String,Object>>>() {});
+	   assertEquals(200,(int)jresp.getStatus());
+	   assertEquals("admin",jresp.getData().get("loginName"));
+	   System.out.println(JSON.toJSONString(jresp));
+	   
+	   sessionModelJpa.deleteBySessionCode(resp.getData().getSessionCode());
+   }
    @Test
    public void testAddUserController() throws Exception {
 	   RequestDto<JSONObject> request = new RequestDto<JSONObject>();

@@ -1,6 +1,8 @@
 package com.fairy.controllers.user;
 
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,10 @@ public class UserController {
 		userModel.logout(token);
 		return ResponseDto.getSuccess();
 	}
-	
+	@RequestMapping("/getCurrentUser")
+	public ResponseDto<Map<String,Object>> getCurrentUser(@RequestBody RequestDto<JSONObject> request) {
+		return ResponseDto.getSuccess(userModel.getCurrentUser(session.getCurrentUser(request).get().getId()));
+	}
 	@RequestMapping("/delUser")
 	public  ResponseDto<String> delUser(@RequestBody RequestDto<JSONObject> request){
 		Long userId = request.getData().getLong("userId");

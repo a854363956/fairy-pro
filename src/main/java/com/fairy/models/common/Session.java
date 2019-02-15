@@ -10,21 +10,21 @@ import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
-import com.fairy.models.logic.jpa.RoleGrantModelJpa;
-import com.fairy.models.logic.jpa.RoleModelJpa;
-import com.fairy.models.logic.jpa.SessionModelJpa;
-import com.fairy.models.logic.jpa.UserModelJpa;
+import com.fairy.models.logic.jpa.GrantRoleModelJpa;
+import com.fairy.models.logic.jpa.BaseRoleModelJpa;
+import com.fairy.models.logic.jpa.BaseSessionModelJpa;
+import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 @Component
 public class Session {
 	@Autowired
-	private SessionModelJpa sessionModelJpa;
+	private BaseSessionModelJpa sessionModelJpa;
 	@Autowired
-	private RoleGrantModelJpa roleGroupModelJpa;
+	private GrantRoleModelJpa roleGroupModelJpa;
 	@Autowired
-	private RoleModelJpa roleModelJpa;
+	private BaseRoleModelJpa roleModelJpa;
 	@Autowired
-	private UserModelJpa userModelJpa;
+	private BaseUserModelJpa userModelJpa;
 
 	public Optional<FairyBaseUser> getCurrentUser(RequestDto<?> request) {
 		return getCurrentUser(request.getToken());

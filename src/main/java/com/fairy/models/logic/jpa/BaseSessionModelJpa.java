@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.fairy.models.dto.jpa.FairyBaseSession;
 
-public interface SessionModelJpa extends JpaRepository<FairyBaseSession,Long> ,CrudRepository<FairyBaseSession,Long> {
+public interface BaseSessionModelJpa extends JpaRepository<FairyBaseSession,Long> ,CrudRepository<FairyBaseSession,Long> {
 	@Modifying
 	@Query("delete from FairyBaseSession where sessionCode=:sessionCode")
 	void deleteBySessionCode(@Param("sessionCode") String sessionCode);

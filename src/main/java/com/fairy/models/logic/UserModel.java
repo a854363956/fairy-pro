@@ -3,6 +3,7 @@ package com.fairy.models.logic;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -16,10 +17,10 @@ import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
 import com.fairy.models.dto.jpa.FairyGrantRole;
-import com.fairy.models.logic.jpa.RoleGrantModelJpa;
-import com.fairy.models.logic.jpa.RoleModelJpa;
-import com.fairy.models.logic.jpa.SessionModelJpa;
-import com.fairy.models.logic.jpa.UserModelJpa;
+import com.fairy.models.logic.jpa.GrantRoleModelJpa;
+import com.fairy.models.logic.jpa.BaseRoleModelJpa;
+import com.fairy.models.logic.jpa.BaseSessionModelJpa;
+import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 import lombok.Data;
 
@@ -27,22 +28,22 @@ import lombok.Data;
 @Service
 public class UserModel {
 	public enum UserVerifyStatus{
-		SUCCESS,
-		WRONG_PASSWORD,
-		USER_DOES_NOT_EXIST,
-		SYSTEM_ERROR,
-		UNMAINTAINED_ROLES,
+		SUCCESS, // 成功
+		WRONG_PASSWORD, // 密码错误
+		USER_DOES_NOT_EXIST, // 用户不存在
+		SYSTEM_ERROR, // 系统错误
+		UNMAINTAINED_ROLES,// 人员未维护角色
 	}
 	@Autowired
-	private UserModelJpa userModelJpa;
+	private BaseUserModelJpa userModelJpa;
 	@Autowired
 	private SnowflakeIdGenerator snowflakeId;
 	@Autowired
-	private SessionModelJpa sessionModelJpa;
+	private BaseSessionModelJpa sessionModelJpa;
 	@Autowired
-	private RoleGrantModelJpa roleGroupModelJpa;
+	private GrantRoleModelJpa roleGroupModelJpa;
 	@Autowired
-	private RoleModelJpa roleModelJap;
+	private BaseRoleModelJpa roleModelJap;
 
 	/**
 	 * 验证当前用户的密码是否正确
@@ -64,7 +65,9 @@ public class UserModel {
 			}
 		}
 	}
-	
+	public Map<String,Object> getCurrentUser(Long userId) {
+		return userModelJpa.findUserInfo(userId).get();
+	}
 	/**
 	 *   退出登入,删除对应的会话信息
 	 * @param sessionCode

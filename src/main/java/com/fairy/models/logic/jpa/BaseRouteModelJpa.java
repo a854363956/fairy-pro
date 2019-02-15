@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.fairy.models.dto.jpa.FairyBaseRoute;
 
-public interface RouteModelJpa extends JpaRepository<FairyBaseRoute,Long> ,CrudRepository<FairyBaseRoute,Long> {
+public interface BaseRouteModelJpa extends JpaRepository<FairyBaseRoute,Long> ,CrudRepository<FairyBaseRoute,Long> {
 	
 	@Query("from FairyBaseRoute where target=:target")
 	Optional<FairyBaseRoute> findRouteByTarget(@Param("target") String target);

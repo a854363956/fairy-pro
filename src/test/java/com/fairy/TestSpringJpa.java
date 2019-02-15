@@ -15,13 +15,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.alibaba.fastjson.JSON;
 import com.fairy.models.common.SnowflakeIdGenerator;
 import com.fairy.models.dto.jpa.FairyBaseUser;
-import com.fairy.models.logic.jpa.UserModelJpa;
+import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestSpringJpa {
 	@Autowired
-	private UserModelJpa userModelJpa;
+	private BaseUserModelJpa userModelJpa;
 	@Test
 	public void testQuery() {
 		List<FairyBaseUser> query = userModelJpa.findAll();

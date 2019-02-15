@@ -82,6 +82,8 @@ com.fairy.models.dto.RequestDto
 2. /api/user/logout 用户登出接口 
 3. /api/user/addUser 添加用户 
 4. /api/user/delUser 删除用户
+5. /api/user/getCurrentUser 获取当前登入用户的信息
+6. /api/menu/getAccessibleMenuAll 获取菜单信息
 
 ##### 关于URL请求权限控制 
 

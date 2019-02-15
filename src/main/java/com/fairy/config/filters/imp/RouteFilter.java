@@ -14,8 +14,8 @@ import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseRoute;
 import com.fairy.models.dto.jpa.FairyGrantRoute;
-import com.fairy.models.logic.jpa.RouteGrantModelJpa;
-import com.fairy.models.logic.jpa.RouteModelJpa;
+import com.fairy.models.logic.jpa.GrantRouteModelJpa;
+import com.fairy.models.logic.jpa.BaseRouteModelJpa;
 
 /**
  *  数据库维护当前角色可以访问的URI路径,如果为维护则无法访问
@@ -25,9 +25,9 @@ public class RouteFilter implements FairyFilter{
 	@Autowired
 	private Session session;
 	@Autowired
-	private RouteModelJpa routeModelJpa;
+	private BaseRouteModelJpa routeModelJpa;
 	@Autowired
-	private RouteGrantModelJpa routeGrantModelJpa;
+	private GrantRouteModelJpa routeGrantModelJpa;
 	@Override
 	public Result isAllow(RequestDto<JSONObject> requestDto, HttpServletRequest request) {
 		String requestUrl = request.getRequestURI().trim();

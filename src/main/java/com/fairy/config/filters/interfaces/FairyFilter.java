@@ -3,7 +3,6 @@ package com.fairy.config.filters.interfaces;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fairy.config.filters.interfaces.FairyFilter.Result;
 import com.fairy.models.dto.RequestDto;
 
 import lombok.Data;

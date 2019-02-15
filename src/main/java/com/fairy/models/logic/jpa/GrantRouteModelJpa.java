@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.fairy.models.dto.jpa.FairyGrantRoute;
 
-public interface RouteGrantModelJpa extends JpaRepository<FairyGrantRoute,Long> ,CrudRepository<FairyGrantRoute,Long>{
+public interface GrantRouteModelJpa extends JpaRepository<FairyGrantRoute,Long> ,CrudRepository<FairyGrantRoute,Long>{
 	@Query("from FairyGrantRole where roleId = :roleId and routeId=:routeId")
 	Optional<FairyGrantRoute> findGrantRoleByRouteId(@Param("routeId") Long routeId,@Param("roleId") Long roleId);
 }
