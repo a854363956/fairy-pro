@@ -9,6 +9,8 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fairy.models.common.Md5Variant;
@@ -67,6 +69,10 @@ public class UserModel {
 	}
 	public Map<String,Object> getCurrentUser(Long userId) {
 		return userModelJpa.findUserInfo(userId).get();
+	}
+	
+	public Page<Map<String, Object>> findUserInfoPage(String userId,Pageable pageable) {
+		return userModelJpa.findUserInfoPage(userId, pageable);
 	}
 	/**
 	 *   退出登入,删除对应的会话信息

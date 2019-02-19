@@ -1,11 +1,13 @@
 package com.fairy.controllers.user;
 
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fairy.models.common.Session;
+import com.fairy.models.dto.Page;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
 import com.fairy.models.logic.UserModel;
@@ -55,6 +58,18 @@ public class UserController {
 		return ResponseDto.getSuccess();
 	}
 	
+	@RequestMapping("/findUserAll")
+	public ResponseDto<Page<List<Map<String, Object>>>> findUserAll(@RequestBody RequestDto<Page<JSONObject>> request){
+		String userId = request.getData().getData().getString("userId");
+		return Page.toReturnPage(
+				userModel.findUserInfoPage(userId, 
+						PageRequest.of(
+							request.getData().getPageNo(), 
+							request.getData().getPageSize()
+					    )
+				     )
+				);
+	}
 	@RequestMapping("/addUser")
 	public ResponseDto<String> addUser(@RequestBody RequestDto<JSONObject> request) {
 		String loginName = request.getData().getString("loginName");

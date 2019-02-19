@@ -15,7 +15,7 @@ public class MenuModel {
 	public @Data class Menu{
 		private String name;
 		private String icon;
-		private List<Menu> routes;
+		private List<Menu> routes= Lists.newArrayList();
 	}
 	
 	@Autowired
