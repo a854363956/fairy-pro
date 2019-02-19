@@ -11,6 +11,7 @@
 7. java 1.8 
 8. mysql 8
 
+系统设计文档,请点击[这里](./doc/SystemDesign.md)
 
 > 所有对字符串的格式统一为UTF-8 ,如果是在代码中编写的统一使用Charsets.UTF_8  
 
