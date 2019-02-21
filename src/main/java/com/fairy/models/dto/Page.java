@@ -1,18 +1,23 @@
 package com.fairy.models.dto;
 
 import java.util.List;
-import java.util.Map;
+
+import com.alibaba.fastjson.JSONObject;
 
 import lombok.Data;
 
 public @Data class Page<T> {
+	public @Data class  Filter{
+		private String name;
+		private String value;
+		private String symbol;
+	}
 	private Long total;
 	private Integer pageSize;
 	private Integer pageNo;
 	private T data;
-	private String sortField;
-	private	String sortOrder;
-	private Map<String,Object> filters;
+	private JSONObject sorts;
+	private List<Filter> filters;
 	
 	/**
 	 *   将spring 的page对象转换为可以返回的page对象
