@@ -71,8 +71,8 @@ public class UserModel {
 		return userModelJpa.findUserInfo(userId).get();
 	}
 	
-	public Page<Map<String, Object>> findUserInfoPage(String userId,Pageable pageable) {
-		return userModelJpa.findUserInfoPage(userId, pageable);
+	public Page<Map<String, Object>> findUserInfoPage(String roleName,String email,String loginName,Pageable pageable) {
+		return userModelJpa.findUserInfoPage(roleName,email,loginName, pageable);
 	}
 	/**
 	 *   退出登入,删除对应的会话信息

@@ -37,7 +37,8 @@ public class TestSpringJpa {
 	@Test
 	public void testQueryUserPage() {
 	
-		Page<Map<String,Object>> datas = userModelJpa.findUserInfoPage("%0%", PageRequest.of(0, 2));
+		Page<Map<String,Object>> datas = userModelJpa.findUserInfoPage("","","", PageRequest.of(0, 2));
+		
 		System.out.println(JSON.toJSONString(datas));
 	}
 	@Test

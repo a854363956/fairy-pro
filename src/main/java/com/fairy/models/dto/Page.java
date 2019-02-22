@@ -7,10 +7,14 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 public @Data class Page<T> {
-	public @Data class  Filter{
+	static public @Data class  Filter{
 		private String name;
 		private String value;
 		private String symbol;
+		
+		public String getValue() {
+			return value == null ? "" : value;
+		}
 	}
 	private Long total;
 	private Integer pageSize;

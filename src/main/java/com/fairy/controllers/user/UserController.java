@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.fairy.models.common.Session;
 import com.fairy.models.dto.Page;
+import com.fairy.models.dto.Page.Filter;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
 import com.fairy.models.logic.UserModel;
@@ -59,12 +60,32 @@ public class UserController {
 	}
 	
 	@RequestMapping("/findUserAll")
-	public ResponseDto<Page<List<Map<String, Object>>>> findUserAll(@RequestBody RequestDto<Page<JSONObject>> request){
-		String userId = request.getData().getData().getString("userId");
+	public ResponseDto<Page<List<Map<String, Object>>>> findUserAll(@RequestBody RequestDto<Page<?>> request){
+	   String roleName = "";
+	   String email = "";
+	   String loginName = "";
+	   List<Filter> filters = request.getData().getFilters();
+	   for (int i = 0; i < filters.size(); i++) {
+		Filter filter = filters.get(i);
+		switch (filter.getName()) {
+			case "roleName":
+				roleName = filter.getValue();
+				break;
+			case "email":
+				email = filter.getValue();
+				break;
+			case "loginName":
+				loginName = filter.getValue();
+				break;
+			default:
+				break;
+			}
+		}
+       
 		return Page.toReturnPage(
-				userModel.findUserInfoPage(userId, 
+				userModel.findUserInfoPage(roleName,email,loginName,
 						PageRequest.of(
-							request.getData().getPageNo(), 
+							request.getData().getPageNo() - 1, 
 							request.getData().getPageSize()
 					    )
 				     )

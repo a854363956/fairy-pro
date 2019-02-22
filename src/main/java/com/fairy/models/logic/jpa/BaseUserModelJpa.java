@@ -36,6 +36,7 @@ public interface BaseUserModelJpa extends JpaRepository<FairyBaseUser,Long> ,Cru
 	
 	@Query("select "
 			+ "new map("
+			+ "u.id as id,"
 			+ "u.loginName as loginName,"
 			+ "u.realName as realName,"
 			+ "u.identityCard as identityCard,"
@@ -47,7 +48,7 @@ public interface BaseUserModelJpa extends JpaRepository<FairyBaseUser,Long> ,Cru
 			+ "left join FairyGrantRole r "
 			+ "on r.userId = u.id "
 			+ "left join FairyBaseRole br "
-			+ "on br.id = r.roleId where u.id like :userId"
+			+ "on br.id = r.roleId where u.realName like %?1% and u.email like %?2% and u.loginName like %?3%"
 			)
-	Page<Map<String,Object>> findUserInfoPage(@Param("userId") String userId,Pageable pageable);
+	Page<Map<String,Object>> findUserInfoPage(String roleName,String identityCard,String loginName,Pageable pageable);
 }

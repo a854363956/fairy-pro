@@ -31,6 +31,7 @@ public class RouteFilter implements FairyFilter{
 	@Override
 	public Result isAllow(RequestDto<JSONObject> requestDto, HttpServletRequest request) {
 		String requestUrl = request.getRequestURI().trim();
+		
 		Optional<FairyBaseRoute> route = routeModelJpa.findRouteByTarget(requestUrl);
 		if(route.isPresent()) {
 			Integer routeType = route.get().getRouteType();
