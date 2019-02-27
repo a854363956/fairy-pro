@@ -18,7 +18,5 @@ public class FairyProApplication {
 	public static void main(String[] args) {
 		springContext = SpringApplication.run(FairyProApplication.class, args);
 	}
-	
-
 }
 

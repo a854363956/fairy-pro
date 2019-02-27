@@ -46,6 +46,11 @@ public class UserModel {
 	private GrantRoleModelJpa roleGroupModelJpa;
 	@Autowired
 	private BaseRoleModelJpa roleModelJap;
+	
+	@Transactional
+	public void updateUser(Long userId,String realName,String identityCard,String email,Integer onlineTime) {
+		userModelJpa.updateUser(userId, realName, identityCard, email, onlineTime);
+	}
 
 	/**
 	 * 验证当前用户的密码是否正确

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +17,15 @@ import com.fairy.models.dto.jpa.FairyBaseUser;
 public interface BaseUserModelJpa extends JpaRepository<FairyBaseUser,Long> ,CrudRepository<FairyBaseUser,Long>{
 	@Query("from FairyBaseUser where loginName =:loginName")
 	List<FairyBaseUser> findUserByLoginName(@Param("loginName") String loginName);
+	
+	@Modifying
+	@Query("update FairyBaseUser r set "
+			+ "r.realName = ?2 , "
+			+ "r.identityCard= ?3 , "
+			+ "r.email= ?4 , "
+			+ "r.onlineTime= ?5 "
+			+ "where r.id= ?1")
+	void updateUser(Long userId,String realName,String identityCard,String email,Integer onlineTime);
 	
 	@Query("select "
 			+ "new map("
@@ -50,5 +60,5 @@ public interface BaseUserModelJpa extends JpaRepository<FairyBaseUser,Long> ,Cru
 			+ "left join FairyBaseRole br "
 			+ "on br.id = r.roleId where u.realName like %?1% and u.email like %?2% and u.loginName like %?3%"
 			)
-	Page<Map<String,Object>> findUserInfoPage(String roleName,String identityCard,String loginName,Pageable pageable);
+	Page<Map<String,Object>> findUserInfoPage(String roleName,String email,String loginName,Pageable pageable);
 }

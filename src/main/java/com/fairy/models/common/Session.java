@@ -40,6 +40,7 @@ public class Session {
 			Long userId = currentSession.get().getUserId();
 			FairyBaseUser queryUser = new FairyBaseUser();
 			queryUser.setId(userId);
+			
 			Example<FairyBaseUser> userexample = Example.of(queryUser);
 			userexample.getMatcher().withMatcher("id", match -> match.exact());
 			return userModelJpa.findOne(userexample);

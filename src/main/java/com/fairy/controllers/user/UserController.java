@@ -30,6 +30,8 @@ public class UserController {
 	
 	@Autowired private Session session;
 	
+	
+	
 	@RequestMapping("/login")
 	public ResponseDto<RespSession> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
 		JSONObject datas = request.getData();
@@ -101,6 +103,17 @@ public class UserController {
 		Long roleId = request.getData().getLong("roleId");
 		Long currentUser = session.getCurrentUser(request).get().getId();
 		userModel.addUser(loginName, realName, identityCard, password, email, currentUser, roleId);
+		return ResponseDto.getSuccess();
+	}
+	
+	@RequestMapping("/updateUser")
+	public ResponseDto<String> updateUser(@RequestBody RequestDto<JSONObject> request){
+		String realName = request.getData().getString("realName");
+		String identityCard = request.getData().getString("identityCard");
+		String email = request.getData().getString("email");
+		Long id = request.getData().getLong("id");
+		Integer onlineTime = request.getData().getInteger("onlineTime");
+		userModel.updateUser(id, realName, identityCard, email, onlineTime);
 		return ResponseDto.getSuccess();
 	}
 }

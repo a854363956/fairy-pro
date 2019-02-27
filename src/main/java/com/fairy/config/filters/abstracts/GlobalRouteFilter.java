@@ -46,6 +46,7 @@ abstract public class GlobalRouteFilter implements Filter {
 				e.printStackTrace();
 				ResponseDto<String> resp = new ResponseDto<String>();
 				resp.setData(e.getMessage());
+				resp.setMessage(e.getMessage());
 				resp.setStatus(510);
 				response.getOutputStream().write(JSON.toJSONString(resp).getBytes(Charsets.UTF_8));
 				return ;

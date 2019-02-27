@@ -1,6 +1,6 @@
 # fairy-pro
 
-##### 采用的技术集成
+#### 采用的技术集成
 
 1. 项目管理 https://zube.io/a854363956/fairy-pro/w/development/kanban  
 2. 持续集成 https://circleci.com/dashboard 
@@ -15,7 +15,7 @@
 
 > 所有对字符串的格式统一为UTF-8 ,如果是在代码中编写的统一使用Charsets.UTF_8  
 
-##### 项目结构描述 
+#### 项目结构描述 
 
 ```bash
 .
@@ -79,13 +79,15 @@ com.fairy.models.dto.RequestDto
 
 ##### 用户管理 
 
-1. /api/user/login  用户登入接口
-2. /api/user/logout 用户登出接口 
-3. /api/user/addUser 添加用户 
-4. /api/user/delUser 删除用户
-5. /api/user/getCurrentUser 获取当前登入用户的信息
-6. /api/user/findUserAll   获取所有人员信息
-7. /api/menu/getAccessibleMenuAll 获取菜单信息
++ /api/user/login  用户登入接口
++ /api/user/logout 用户登出接口 
++ /api/user/addUser 添加用户 
++ /api/user/delUser 删除用户
++ /api/user/getCurrentUser 获取当前登入用户的信息
++ /api/user/findUserAll   获取所有人员信息
++ /api/user/updateUser    修改人员信息
++ /api/menu/getAccessibleMenuAll 获取菜单信息
+
 
 ##### 关于URL请求权限控制 
 
@@ -101,5 +103,12 @@ com.fairy.models.dto.RequestDto
 
 1. Nginx反向代理后,会导致fairy_base_session表中的ip_addr字段为Nginx的IP地址,而不是真实的IP地址  - 以后调整
 
+#### Docker 编译 
+
+```docker
+docker build -t fairy/model:latest . 
+
+docker run --name test -d fairy/model:latest -e GIT_ADDR=https://github.com/a854363956/fairy-model.git
+```
 
 
