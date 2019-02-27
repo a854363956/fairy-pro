@@ -41,6 +41,7 @@ public class TestSpringJpa {
 		
 		System.out.println(JSON.toJSONString(datas));
 	}
+
 	@Test
 	public void testCreateUser() {
 		FairyBaseUser user = new FairyBaseUser();
