@@ -60,5 +60,12 @@ public interface BaseUserModelJpa extends JpaRepository<FairyBaseUser,Long> ,Cru
 			+ "left join FairyBaseRole br "
 			+ "on br.id = r.roleId where u.realName like %?1% and u.email like %?2% and u.loginName like %?3%"
 			)
-	Page<Map<String,Object>> findUserInfoPage(String roleName,String email,String loginName,Pageable pageable);
+	Page<Map<String,Object>> findUserInfoPage(String roleName,String email,String loginName,Pageable pageable); 
+	
+	
+	@Query("from FairyBaseUser u where u.loginName= ?1")
+	List<FairyBaseUser> queryUserByLoginName(String loginName);
+	
+	@Query("from FairyBaseUser u where u.realName= ?1")
+	List<FairyBaseUser> queryUserByRealName(String realName);
 }

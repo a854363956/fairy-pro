@@ -19,8 +19,10 @@ import com.fairy.models.dto.Page;
 import com.fairy.models.dto.Page.Filter;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
+import com.fairy.models.dto.jpa.FairyBaseUser;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.RespSession;
+import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 @RestController
 @RequestMapping(value ="/api/user", method=RequestMethod.POST )
@@ -30,7 +32,7 @@ public class UserController {
 	
 	@Autowired private Session session;
 	
-	
+	@Autowired  private BaseUserModelJpa baseUserModelJpa;
 	
 	@RequestMapping("/login")
 	public ResponseDto<RespSession> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
@@ -60,6 +62,19 @@ public class UserController {
 		userModel.delUser(userId, currentType);
 		return ResponseDto.getSuccess();
 	}
+	
+	@RequestMapping("/findUserByLoginName")
+	public ResponseDto<List<FairyBaseUser>> findUserByLoginName(@RequestBody RequestDto<JSONObject> request){
+		String loginName = request.getData().getString("loginName");
+		return ResponseDto.getSuccess(baseUserModelJpa.queryUserByLoginName(loginName));
+	}
+	
+	@RequestMapping("/findUserByrealName")
+	public ResponseDto<List<FairyBaseUser>> findUserByRealName(@RequestBody RequestDto<JSONObject> request){
+		String realName = request.getData().getString("realName");
+		return ResponseDto.getSuccess(baseUserModelJpa.queryUserByRealName(realName));
+	}
+	
 	
 	@RequestMapping("/findUserAll")
 	public ResponseDto<Page<List<Map<String, Object>>>> findUserAll(@RequestBody RequestDto<Page<?>> request){
@@ -98,11 +113,11 @@ public class UserController {
 		String loginName = request.getData().getString("loginName");
 		String realName = request.getData().getString("realName");
 		String identityCard = request.getData().getString("identityCard");
-		String password = request.getData().getString("password");
 		String email = request.getData().getString("email");
 		Long roleId = request.getData().getLong("roleId");
+		Integer onlineTime = request.getData().getInteger("onlineTime");
 		Long currentUser = session.getCurrentUser(request).get().getId();
-		userModel.addUser(loginName, realName, identityCard, password, email, currentUser, roleId);
+		userModel.addUser(loginName, realName, identityCard, email, currentUser, roleId,onlineTime);
 		return ResponseDto.getSuccess();
 	}
 	

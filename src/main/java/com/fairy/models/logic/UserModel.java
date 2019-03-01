@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import lombok.Data;
 
 @Service
 public class UserModel {
+	@Value("${fairy.defaultPassword}") String defaultPassword;
 	public enum UserVerifyStatus{
 		SUCCESS, // 成功
 		WRONG_PASSWORD, // 密码错误
@@ -93,21 +95,21 @@ public class UserModel {
 	 * @param loginName    登入名称
 	 * @param realName     用户的真实姓名
 	 * @param identityCard 身份证
-	 * @param password     用户密码
 	 * @param email        用户的邮箱地址
 	 * @param roleId       所属的角色ID
 	 * @param currentType  当前登入人的角色类别
 	 * @param currentUser  当前登入人的人员ID
+	 * @param onlineTime   在线时长/分钟
 	 */
 	@Transactional
 	public void addUser(
 				String loginName,
 				String realName,
 				String identityCard,
-				String password,
 				String email,
 				Long  currentUser,
-				Long roleId
+				Long roleId,
+				Integer onlineTime
 			) {
 		
 		Optional<FairyBaseRole> roleInfo = roleModelJap.findById(roleId);
@@ -119,8 +121,9 @@ public class UserModel {
 			fbu.setId(snowflakeId.nextId());
 			fbu.setIdentityCard(identityCard);
 			fbu.setLoginName(loginName);
-			fbu.setPassword(Md5Variant.strongEncryption(password));
+			fbu.setPassword(Md5Variant.strongEncryption(defaultPassword));
 			fbu.setRealName(realName);
+			fbu.setOnlineTime(onlineTime);
 			userModelJpa.save(fbu);
 			
 			// 创建角色关联信息

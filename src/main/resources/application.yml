@@ -29,4 +29,6 @@ spring:
 snowflake:
    workerId: 0
    dataCenterId: 0
+fairy:
+   defaultPassword: 123456
 
