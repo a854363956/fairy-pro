@@ -2,6 +2,10 @@ package com.fairy.models.dto.jpa;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,4 +35,5 @@ public @Data class FairyBaseRole implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name = "create_time")
 	private Date createTime;
+
 }

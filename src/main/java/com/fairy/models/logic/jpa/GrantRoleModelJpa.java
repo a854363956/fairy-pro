@@ -13,5 +13,6 @@ public interface GrantRoleModelJpa extends JpaRepository<FairyGrantRole,Long> ,C
    @Query(value = "from FairyGrantRole where userId = :userId")
    List<FairyGrantRole> findByUserId(@Param("userId") Long userId);
 
+   
 }
 

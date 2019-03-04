@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -16,11 +17,15 @@ import org.springframework.stereotype.Service;
 
 import com.fairy.models.common.Md5Variant;
 import com.fairy.models.common.SnowflakeIdGenerator;
+import com.fairy.models.common.StreamUtil;
+import com.fairy.models.dto.SelectGroup;
 import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
 import com.fairy.models.dto.jpa.FairyGrantRole;
 import com.fairy.models.logic.jpa.GrantRoleModelJpa;
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.Lists;
 import com.fairy.models.logic.jpa.BaseRoleModelJpa;
 import com.fairy.models.logic.jpa.BaseSessionModelJpa;
 import com.fairy.models.logic.jpa.BaseUserModelJpa;
@@ -48,10 +53,60 @@ public class UserModel {
 	private GrantRoleModelJpa roleGroupModelJpa;
 	@Autowired
 	private BaseRoleModelJpa roleModelJap;
+	@Autowired
+	private GrantRoleModelJpa grantRoleModelJpa;
 	
+	private Map<Integer,String> roleTypeMapping=ImmutableBiMap.of(
+			0, "ROOT角色", 
+			1, "管理角色", 
+			2, "普通角色");
 	@Transactional
-	public void updateUser(Long userId,String realName,String identityCard,String email,Integer onlineTime) {
+	public void updateUser(Long userId,String realName,String identityCard,String email,Integer onlineTime,Long roleId) {
 		userModelJpa.updateUser(userId, realName, identityCard, email, onlineTime);
+		
+		List<FairyGrantRole> roles = grantRoleModelJpa.findByUserId(userId);
+		roles.forEach((data)->{
+			grantRoleModelJpa.delete(data);
+		});
+		
+		FairyGrantRole fgr = new FairyGrantRole();
+		fgr.setAuthorize(userId);
+		fgr.setCreateTime(new Date());
+		fgr.setRoleId(roleId);
+		fgr.setUserId(userId);
+		fgr.setId(snowflakeId.nextId());
+		
+		grantRoleModelJpa.save(fgr);
+	}
+	
+	/**
+	 * 返回人员信息的GourpSelect的数据
+	 * @return
+	 */
+	public List<SelectGroup> findGroupRoleSelect() {
+		List<FairyBaseRole> fbr = roleModelJap.findAll();
+		List<FairyBaseRole> groupFbr = fbr.stream()
+				.filter(StreamUtil.distinctByKey(FairyBaseRole::getRoleType))
+				.collect(Collectors.toList());
+		List<SelectGroup> result = Lists.newArrayList();
+		for(FairyBaseRole f : groupFbr) {
+			Integer roleType = f.getRoleType();
+			SelectGroup selectGroup= new SelectGroup();
+			selectGroup.setGroupName(roleTypeMapping.get(roleType));
+			selectGroup.setGroupList(Lists.newArrayList());
+			fbr.stream()
+			.filter(data -> data.getRoleType().equals(f.getRoleType()))
+			.collect(Collectors.toList()).forEach((data)->{
+				com.fairy.models.dto.Select select = new com.fairy.models.dto.Select();
+				select.setKey(data.getRoleName());
+				select.setValue(""+data.getId());
+				selectGroup.getGroupList().add(select);
+			});
+			
+			result.add(selectGroup);
+		}
+		return result;
+		
 	}
 
 	/**

@@ -19,9 +19,13 @@ import com.fairy.models.dto.Page;
 import com.fairy.models.dto.Page.Filter;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
+import com.fairy.models.dto.Select;
+import com.fairy.models.dto.SelectGroup;
+import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseUser;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.RespSession;
+import com.fairy.models.logic.jpa.BaseRoleModelJpa;
 import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 @RestController
@@ -32,7 +36,9 @@ public class UserController {
 	
 	@Autowired private Session session;
 	
-	@Autowired  private BaseUserModelJpa baseUserModelJpa;
+	@Autowired private BaseUserModelJpa baseUserModelJpa;
+	
+	@Autowired private BaseRoleModelJpa baseRoleModelJpa;
 	
 	@RequestMapping("/login")
 	public ResponseDto<RespSession> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
@@ -121,14 +127,20 @@ public class UserController {
 		return ResponseDto.getSuccess();
 	}
 	
+	@RequestMapping("/findGroupRoleSelect")
+	public ResponseDto<List<SelectGroup>> findSelectRole(@RequestBody RequestDto<JSONObject> request){
+		return ResponseDto.getSuccess(userModel.findGroupRoleSelect());
+	}
+	
 	@RequestMapping("/updateUser")
 	public ResponseDto<String> updateUser(@RequestBody RequestDto<JSONObject> request){
 		String realName = request.getData().getString("realName");
 		String identityCard = request.getData().getString("identityCard");
 		String email = request.getData().getString("email");
 		Long id = request.getData().getLong("id");
+		Long roleName = request.getData().getLong("roleName");
 		Integer onlineTime = request.getData().getInteger("onlineTime");
-		userModel.updateUser(id, realName, identityCard, email, onlineTime);
+		userModel.updateUser(id, realName, identityCard, email, onlineTime,roleName);
 		return ResponseDto.getSuccess();
 	}
 }

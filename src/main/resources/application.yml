@@ -14,6 +14,9 @@ logging:
     org.hibernate.secure: ERROR
     o.h.service.internal: ERROR
 spring:
+  jackson:
+    generator:
+      write_numbers_as_strings: true
   datasource:
     url : jdbc:mysql://localhost:3306/fairy-pro?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username : root
@@ -30,5 +33,5 @@ snowflake:
    workerId: 0
    dataCenterId: 0
 fairy:
-   defaultPassword: 123456
+   defaultPassword: 123456 # 用户的默认密码
 

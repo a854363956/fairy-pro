@@ -86,6 +86,7 @@ com.fairy.models.dto.RequestDto
 + /api/user/getCurrentUser 获取当前登入用户的信息
 + /api/user/findUserAll   获取所有人员信息
 + /api/user/updateUser    修改人员信息
++ /api/user/findRoleAll   查询所有的角色信息
 + /api/menu/getAccessibleMenuAll 获取菜单信息
 
 
