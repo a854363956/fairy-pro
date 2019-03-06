@@ -24,7 +24,6 @@ import com.fairy.models.dto.select.SelectGroup;
 import com.fairy.models.dto.tree.Tree;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.RespSession;
-import com.fairy.models.logic.jpa.BaseRoleModelJpa;
 import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 @RestController
