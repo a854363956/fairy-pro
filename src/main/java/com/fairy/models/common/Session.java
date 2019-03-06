@@ -34,7 +34,9 @@ public class Session {
 		FairyBaseSession queryValue = new FairyBaseSession();
 		queryValue.setSessionCode(token);
 		Example<FairyBaseSession> example = Example.of(queryValue);
-		example.getMatcher().withMatcher("sessionCode", match -> match.exact());
+		example
+		.getMatcher()
+		.withMatcher("sessionCode", match -> match.exact());
 		 Optional<FairyBaseSession> currentSession = getCurrentSession(token);
 		 if(currentSession.isPresent()) {
 			Long userId = currentSession.get().getUserId();

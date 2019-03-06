@@ -9,11 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
 import com.fairy.models.dto.jpa.FairyBaseUser;
 
-public interface BaseUserModelJpa extends JpaRepository<FairyBaseUser,Long> {
+public interface BaseUserModelJpa extends JpaRepository<FairyBaseUser,Long>, QuerydslPredicateExecutor<FairyBaseUser> {
 	@Query("from FairyBaseUser where loginName =:loginName")
 	List<FairyBaseUser> findUserByLoginName(@Param("loginName") String loginName);
 	

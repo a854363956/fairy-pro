@@ -1,23 +1,27 @@
 
 plugins {
-	id 'java'
-	id 'jacoco'
-	id 'net.ltgt.apt' version '0.10'
-	id 'org.springframework.boot' version "2.1.2.RELEASE"
+	id "java"
+	id "jacoco"
+	id "net.ltgt.apt" version "0.10"
+	id "org.springframework.boot" version "2.1.2.RELEASE"
 	id "io.spring.dependency-management" version "1.0.6.RELEASE"
-	id 'io.franzbecker.gradle-lombok' version '2.0'
-	
+	id "io.franzbecker.gradle-lombok" version "2.0"
 }
 
 repositories {
 	mavenCentral()
 }
 
-group = 'com.fairy'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
 
-
+springBoot {
+	buildInfo {
+		properties {
+		    artifact ="zhangj"
+			group = "com.fairy"
+			version = "0.0.1-SNAPSHOT"
+		}
+	}
+}
 
 jacocoTestCoverageVerification {
     violationRules {
@@ -29,12 +33,12 @@ jacocoTestCoverageVerification {
 
         rule {
             enabled = false
-            element = 'CLASS'
-            includes = ['org.gradle.*']
+            element = "CLASS"
+            includes = ["org.gradle.*"]
 
             limit {
-                counter = 'LINE'
-                value = 'TOTALCOUNT'
+                counter = "LINE"
+                value = "TOTALCOUNT"
                 maximum = 0.3
             }
         }
@@ -42,19 +46,47 @@ jacocoTestCoverageVerification {
 }
 
 
-
+ext {
+	queryDslVersion = "4.2.1"
+	mysqlConnectorVersion = "8.0.14"
+	fastJsonVersion = "1.2.51"
+	guavaVersion = "27.0.1-jre"
+	dockerJavaVersion = "3.1.1"
+}
 
 
 dependencies {
-	implementation 'com.alibaba:fastjson:1.2.51' 
-	implementation 'com.google.guava:guava:27.0.1-jre' 
-	implementation 'mysql:mysql-connector-java:8.0.14'
-	implementation 'com.github.docker-java:docker-java:3.1.1'
-	implementation 'com.querydsl:querydsl-apt:4.2.1'
-	implementation 'com.querydsl:querydsl-jpa:4.2.1'
-	implementation 'org.springframework.boot:spring-boot-starter-amqp' 
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation "mysql:mysql-connector-java:${mysqlConnectorVersion}"
 	
+	implementation "com.alibaba:fastjson:${fastJsonVersion}" 	
+	implementation "com.google.guava:guava:${guavaVersion}" 
+	implementation "com.github.docker-java:docker-java:${dockerJavaVersion}"
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	
+	implementation "org.springframework.boot:spring-boot-starter-amqp" 
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jpa"
+	annotationProcessor "org.springframework.boot:spring-boot-starter-data-jpa"
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
+
+// fix bug https://github.com/gradle/gradle/issues/4956
+compileJava {
+    String relativePath = "build/generated/source/apt/main"
+    sourceSets.main.java { srcDir relativePath }
+    File generatedSourceDir = project.file(relativePath)
+    project.mkdir(generatedSourceDir)
+    options.annotationProcessorGeneratedSourcesDirectory = generatedSourceDir
+    outputs.dir(generatedSourceDir)
+    
+    doFirst {
+        project.delete(generatedSourceDir)
+        project.mkdir(generatedSourceDir)
+    }
+}
+// end 
+

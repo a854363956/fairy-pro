@@ -146,6 +146,7 @@ public class TestUserModel {
    }
    
    @Test
+   @Transactional
    public void testGetCurrentUser() throws UnsupportedEncodingException, Exception {
 	   RequestDto<JSONObject> request = new  RequestDto<JSONObject>();
 	   JSONObject json = new JSONObject();
@@ -188,6 +189,7 @@ public class TestUserModel {
 	   json.put( "password","admin");
 	   json.put( "roleId",1);
 	   json.put( "email", "zhangjin0908@Hotmail.com");
+	   json.put("onlineTime", 30);
 	   request.setData(json);
 	   request.setToken("5e7187526bb84317913fdb781cce04ae323debabfe84469ebb873af1cc18113e");
 	   
@@ -206,6 +208,7 @@ public class TestUserModel {
    }
    
    @Test
+   @Transactional
    public void testDelUserController() throws UnsupportedEncodingException, Exception {
 		FairyBaseUser user = new FairyBaseUser();
 		user.setCreateTime(new Date());
@@ -214,6 +217,7 @@ public class TestUserModel {
 		user.setLoginName("delUser");
 		user.setPassword("zhangj");
 		user.setRealName("张尽");
+		user.setOnlineTime(30);
 		user.setId(snowflakeId.nextId());
 		userModelJpa.save(user);
 	   
@@ -221,6 +225,7 @@ public class TestUserModel {
 	   RequestDto<JSONObject> request = new RequestDto<JSONObject>();
 	   JSONObject json = new JSONObject();
 	   request.setData(json);
+	   request.setToken("5e7187526bb84317913fdb781cce04ae323debabfe84469ebb873af1cc18113e");
 	   json.put("userId", user.getId());
 	   
 	   String text = mockMvc.perform(post("/api/user/delUser").

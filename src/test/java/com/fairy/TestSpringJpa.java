@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,8 +19,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.alibaba.fastjson.JSON;
 import com.fairy.models.common.SnowflakeIdGenerator;
 import com.fairy.models.dto.jpa.FairyBaseUser;
+import com.fairy.models.dto.jpa.QFairyBaseUser;
 import com.fairy.models.logic.jpa.BaseMenuModelJpa;
 import com.fairy.models.logic.jpa.BaseUserModelJpa;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,12 +40,18 @@ public class TestSpringJpa {
 	
 	@Test
 	public void testQueryUserPage() {
-	
 		Page<Map<String,Object>> datas = userModelJpa.findUserInfoPage("","","", PageRequest.of(0, 2));
 		
 		System.out.println(JSON.toJSONString(datas));
 	}
-
+	@Autowired
+	private JPAQueryFactory jpaQuery;
+	@Test
+	public void testQueryDsl() {
+		QFairyBaseUser qbu = QFairyBaseUser.fairyBaseUser;
+		List<FairyBaseUser> data= jpaQuery.selectFrom(qbu).where(qbu.loginName.eq("admin")).fetch();
+		assertEquals(data.size(), 1);
+	}
 
 	@Test
 	public void testCreateUser() {
@@ -50,14 +59,13 @@ public class TestSpringJpa {
 		user.setCreateTime(new Date());
 		user.setEmail("zhangjin0908@hotmail.com");
 		user.setIdentityCard("429005199609080071");
-		user.setLoginName("test");
+		user.setLoginName("testCreateUser");
 		user.setPassword("zhangj");
 		user.setRealName("张尽");
+		user.setOnlineTime(30);
 		user.setId(snowflakeId.nextId());
 		userModelJpa.save(user);
-		
 		assertEquals(userModelJpa.findUserByLoginName("test").size(),1);
-		
 		System.out.println(JSON.toJSONString(userModelJpa.findUserByLoginName("test").get(0)));
 		userModelJpa.delete(user);
 	}
