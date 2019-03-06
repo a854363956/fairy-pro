@@ -18,11 +18,13 @@ import org.springframework.stereotype.Service;
 import com.fairy.models.common.Md5Variant;
 import com.fairy.models.common.SnowflakeIdGenerator;
 import com.fairy.models.common.StreamUtil;
-import com.fairy.models.dto.SelectGroup;
 import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseSession;
 import com.fairy.models.dto.jpa.FairyBaseUser;
 import com.fairy.models.dto.jpa.FairyGrantRole;
+import com.fairy.models.dto.select.SelectGroup;
+import com.fairy.models.dto.tree.Tree;
+import com.fairy.models.dto.tree.TreeNode;
 import com.fairy.models.logic.jpa.GrantRoleModelJpa;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.Lists;
@@ -80,6 +82,23 @@ public class UserModel {
 	}
 	
 	/**
+	 *  获取角色信息 - 不支持嵌套
+	 * @return
+	 */
+	public Tree findRoleTreeData() {
+		List<FairyBaseRole> fbr = roleModelJap.findAll();
+		Tree tree = new Tree();
+		tree.setTreeNode(Lists.newArrayList());
+		for(FairyBaseRole role : fbr) {
+			TreeNode treeNode = new TreeNode();
+			treeNode.setKey(role.getId());
+			treeNode.setTitle(role.getRoleName());
+			tree.getTreeNode().add(treeNode);
+		}
+		return tree;
+	}
+	
+	/**
 	 * 返回人员信息的GourpSelect的数据
 	 * @return
 	 */
@@ -97,7 +116,7 @@ public class UserModel {
 			fbr.stream()
 			.filter(data -> data.getRoleType().equals(f.getRoleType()))
 			.collect(Collectors.toList()).forEach((data)->{
-				com.fairy.models.dto.Select select = new com.fairy.models.dto.Select();
+				com.fairy.models.dto.select.Select select = new com.fairy.models.dto.select.Select();
 				select.setKey(data.getRoleName());
 				select.setValue(""+data.getId());
 				selectGroup.getGroupList().add(select);

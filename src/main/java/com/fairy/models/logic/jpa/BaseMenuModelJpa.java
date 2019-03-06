@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.fairy.models.dto.jpa.FairyBaseMenu;
 
-public interface BaseMenuModelJpa extends JpaRepository<FairyBaseMenu,Long> ,CrudRepository<FairyBaseMenu,Long>  {
+public interface BaseMenuModelJpa extends JpaRepository<FairyBaseMenu,Long> {
 	@Query("select m from FairyBaseMenu m "
 			+ "left join FairyGrantMenu r "
 			+ "on m.id = r.menuId "

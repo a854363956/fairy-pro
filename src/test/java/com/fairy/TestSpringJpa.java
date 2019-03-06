@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.alibaba.fastjson.JSON;
 import com.fairy.models.common.SnowflakeIdGenerator;
 import com.fairy.models.dto.jpa.FairyBaseUser;
+import com.fairy.models.logic.jpa.BaseMenuModelJpa;
 import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 @RunWith(SpringRunner.class)
@@ -41,6 +42,7 @@ public class TestSpringJpa {
 		
 		System.out.println(JSON.toJSONString(datas));
 	}
+
 
 	@Test
 	public void testCreateUser() {

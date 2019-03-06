@@ -19,10 +19,9 @@ import com.fairy.models.dto.Page;
 import com.fairy.models.dto.Page.Filter;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
-import com.fairy.models.dto.Select;
-import com.fairy.models.dto.SelectGroup;
-import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseUser;
+import com.fairy.models.dto.select.SelectGroup;
+import com.fairy.models.dto.tree.Tree;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.RespSession;
 import com.fairy.models.logic.jpa.BaseRoleModelJpa;
@@ -38,7 +37,6 @@ public class UserController {
 	
 	@Autowired private BaseUserModelJpa baseUserModelJpa;
 	
-	@Autowired private BaseRoleModelJpa baseRoleModelJpa;
 	
 	@RequestMapping("/login")
 	public ResponseDto<RespSession> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
@@ -130,6 +128,11 @@ public class UserController {
 	@RequestMapping("/findGroupRoleSelect")
 	public ResponseDto<List<SelectGroup>> findSelectRole(@RequestBody RequestDto<JSONObject> request){
 		return ResponseDto.getSuccess(userModel.findGroupRoleSelect());
+	}
+	
+	@RequestMapping("/findRoleTree")
+	public ResponseDto<Tree> findRoleTree(@RequestBody RequestDto<JSONObject> request){
+		return ResponseDto.getSuccess(userModel.findRoleTreeData());
 	}
 	
 	@RequestMapping("/updateUser")

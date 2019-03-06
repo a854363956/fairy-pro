@@ -1,4 +1,4 @@
-package com.fairy.models.dto;
+package com.fairy.models.dto.select;
 
 import java.util.List;
 
