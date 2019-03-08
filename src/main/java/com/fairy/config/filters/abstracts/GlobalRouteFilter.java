@@ -10,6 +10,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import com.alibaba.fastjson.JSON;
@@ -20,12 +22,13 @@ import com.fairy.config.filters.interfaces.FairyFilter.Result;
 import com.fairy.models.common.RequestWrapper;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
+import com.fairy.models.exception.FairyException;
 import com.google.common.base.Charsets;
 /**
  * 	路由拦截器,基于Spring 实现的拦截,通过重写getApplicationContext,以及实现FairyFilter来注册拦截器
  */
-abstract public class GlobalRouteFilter implements Filter {
-
+public abstract class GlobalRouteFilter implements Filter {
+	protected Logger logger = LoggerFactory.getLogger(this.getClass()); 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -36,15 +39,15 @@ abstract public class GlobalRouteFilter implements Filter {
 		Map<String, FairyFilter> filters = getApplicationContext().getBeansOfType(FairyFilter.class);
 		
 		// 开始调用拦截器内容
-		for(String k : filters.keySet()) {
+		for(Map.Entry<String,FairyFilter> entry : filters.entrySet()) {
 			try {
-				Result result = filters.get(k).isAllow(requestDto, (HttpServletRequest)request);
-				if(result.isStatus() == false) {
-					throw new Exception(result.getMessage());
+				Result result = entry.getValue().isAllow(requestDto, (HttpServletRequest)request);
+				if(result.isStatus()) {
+					throw new FairyException(result.getMessage());
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-				ResponseDto<String> resp = new ResponseDto<String>();
+				logger.error("GlobalRouteFilter", e);
+				ResponseDto<String> resp = new ResponseDto<>();
 				resp.setData(e.getMessage());
 				resp.setMessage(e.getMessage());
 				resp.setStatus(510);
@@ -57,7 +60,6 @@ abstract public class GlobalRouteFilter implements Filter {
 		
 		// 放行到下一个拦截器
 		chain.doFilter(requestWrapper, response);
-		return;
 	}
 	
 	
@@ -65,5 +67,5 @@ abstract public class GlobalRouteFilter implements Filter {
 	 *  获取Spring的上下文
 	 * @return
 	 */
-	abstract protected ApplicationContext getApplicationContext();
+	protected abstract ApplicationContext getApplicationContext();
 }

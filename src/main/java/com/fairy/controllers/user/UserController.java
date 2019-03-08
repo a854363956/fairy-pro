@@ -3,14 +3,15 @@ package com.fairy.controllers.user;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -19,15 +20,17 @@ import com.fairy.models.dto.Page;
 import com.fairy.models.dto.Page.Filter;
 import com.fairy.models.dto.RequestDto;
 import com.fairy.models.dto.ResponseDto;
+import com.fairy.models.dto.jpa.FairyBaseRole;
 import com.fairy.models.dto.jpa.FairyBaseUser;
 import com.fairy.models.dto.select.SelectGroup;
 import com.fairy.models.dto.tree.Tree;
+import com.fairy.models.exception.FairyException;
 import com.fairy.models.logic.UserModel;
 import com.fairy.models.logic.UserModel.RespSession;
 import com.fairy.models.logic.jpa.BaseUserModelJpa;
 
 @RestController
-@RequestMapping(value ="/api/user", method=RequestMethod.POST )
+@RequestMapping(value ="/api/user")
 public class UserController {
 	
 	@Autowired private UserModel userModel;
@@ -37,7 +40,7 @@ public class UserController {
 	@Autowired private BaseUserModelJpa baseUserModelJpa;
 	
 	
-	@RequestMapping("/login")
+	@PostMapping("/login")
 	public ResponseDto<RespSession> login(@RequestBody RequestDto<JSONObject> request,HttpServletRequest req) {
 		JSONObject datas = request.getData();
 		String loginName = datas.getString("loginName");
@@ -48,38 +51,50 @@ public class UserController {
 		);
 	}
 	
-	@RequestMapping("/logout")
+	@PostMapping("/logout")
 	public ResponseDto<String> logout(@RequestBody RequestDto<JSONObject> request) {
 		String token = request.getToken();
 		userModel.logout(token);
 		return ResponseDto.getSuccess();
 	}
-	@RequestMapping("/getCurrentUser")
-	public ResponseDto<Map<String,Object>> getCurrentUser(@RequestBody RequestDto<JSONObject> request) {
-		return ResponseDto.getSuccess(userModel.getCurrentUser(session.getCurrentUser(request).get().getId()));
-	}
-	@RequestMapping("/delUser")
-	public  ResponseDto<String> delUser(@RequestBody RequestDto<JSONObject> request){
-		Long userId = request.getData().getLong("userId");
-		Integer currentType = session.getCurrentRole(request).get().getRoleType();
-		userModel.delUser(userId, currentType);
-		return ResponseDto.getSuccess();
+	
+	@PostMapping("/getCurrentUser")
+	public ResponseDto<Map<String,Object>> getCurrentUser(@RequestBody RequestDto<JSONObject> request) throws FairyException {
+		Optional<FairyBaseUser> opt = session.getCurrentUser(request);
+		if(opt.isPresent()) {
+			return ResponseDto.getSuccess(userModel.getCurrentUser(opt.get().getId()));
+		}else {
+			throw new FairyException("Current personnel do not exist");
+		}
 	}
 	
-	@RequestMapping("/findUserByLoginName")
+	@PostMapping("/delUser")
+	public  ResponseDto<String> delUser(@RequestBody RequestDto<JSONObject> request) throws FairyException{
+		Long userId = request.getData().getLong("userId");
+		Optional<FairyBaseRole> opt = session.getCurrentRole(request);
+		if(opt.isPresent()) {
+			Integer currentType = opt.get().getRoleType();
+			userModel.delUser(userId, currentType);
+			return ResponseDto.getSuccess();
+		}else {
+			throw new FairyException("Current personnel do not exist");
+		}
+	}
+	
+	@PostMapping("/findUserByLoginName")
 	public ResponseDto<List<FairyBaseUser>> findUserByLoginName(@RequestBody RequestDto<JSONObject> request){
 		String loginName = request.getData().getString("loginName");
 		return ResponseDto.getSuccess(baseUserModelJpa.queryUserByLoginName(loginName));
 	}
 	
-	@RequestMapping("/findUserByrealName")
+	@PostMapping("/findUserByrealName")
 	public ResponseDto<List<FairyBaseUser>> findUserByRealName(@RequestBody RequestDto<JSONObject> request){
 		String realName = request.getData().getString("realName");
 		return ResponseDto.getSuccess(baseUserModelJpa.queryUserByRealName(realName));
 	}
 	
 	
-	@RequestMapping("/findUserAll")
+	@PostMapping("/findUserAll")
 	public ResponseDto<Page<List<Map<String, Object>>>> findUserAll(@RequestBody RequestDto<Page<?>> request){
 	   String roleName = "";
 	   String email = "";
@@ -111,30 +126,34 @@ public class UserController {
 				     )
 				);
 	}
-	@RequestMapping("/addUser")
-	public ResponseDto<String> addUser(@RequestBody RequestDto<JSONObject> request) {
+	@PostMapping("/addUser")
+	public ResponseDto<String> addUser(@RequestBody RequestDto<JSONObject> request) throws FairyException {
 		String loginName = request.getData().getString("loginName");
 		String realName = request.getData().getString("realName");
 		String identityCard = request.getData().getString("identityCard");
 		String email = request.getData().getString("email");
 		Long roleId = request.getData().getLong("roleId");
 		Integer onlineTime = request.getData().getInteger("onlineTime");
-		Long currentUser = session.getCurrentUser(request).get().getId();
-		userModel.addUser(loginName, realName, identityCard, email, currentUser, roleId,onlineTime);
-		return ResponseDto.getSuccess();
+		Optional<FairyBaseUser> currentUser = session.getCurrentUser(request);
+		if(currentUser.isPresent()) {
+			userModel.addUser(loginName, realName, identityCard, email, currentUser.get().getId(), roleId,onlineTime);
+			return ResponseDto.getSuccess();
+		}else {
+			throw new FairyException("Current personnel do not exist");
+		}
 	}
 	
-	@RequestMapping("/findGroupRoleSelect")
+	@PostMapping("/findGroupRoleSelect")
 	public ResponseDto<List<SelectGroup>> findSelectRole(@RequestBody RequestDto<JSONObject> request){
 		return ResponseDto.getSuccess(userModel.findGroupRoleSelect());
 	}
 	
-	@RequestMapping("/findRoleTree")
+	@PostMapping("/findRoleTree")
 	public ResponseDto<Tree> findRoleTree(@RequestBody RequestDto<JSONObject> request){
 		return ResponseDto.getSuccess(userModel.findRoleTreeData());
 	}
 	
-	@RequestMapping("/updateUser")
+	@PostMapping("/updateUser")
 	public ResponseDto<String> updateUser(@RequestBody RequestDto<JSONObject> request){
 		String realName = request.getData().getString("realName");
 		String identityCard = request.getData().getString("identityCard");
