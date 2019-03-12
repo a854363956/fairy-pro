@@ -55,8 +55,8 @@ public class SnowflakeIdGenerator {
     * @param dataCenterId 数据中心ID (0~31)
     */
    public SnowflakeIdGenerator( 
-		   @Value("${snowflake.workerId}") long workerId,
-		   @Value("${snowflake.dataCenterId}") long dataCenterId
+		   @Value("${fairy.snowflake.workerId}") long workerId,
+		   @Value("${fairy.snowflake.dataCenterId}") long dataCenterId
 		) {
        if (workerId > maxWorkerId || workerId < 0) {
            throw new IllegalArgumentException(String.format("Worker Id can't be greater than %d or less than 0", maxWorkerId));

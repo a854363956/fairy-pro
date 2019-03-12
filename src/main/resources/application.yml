@@ -14,6 +14,8 @@ logging:
     org.hibernate.secure: ERROR
     o.h.service.internal: ERROR
 spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
   jackson:
     generator:
       write_numbers_as_strings: true
@@ -29,9 +31,11 @@ spring:
     host: localhost
     username: guest
     password: guest
-snowflake:
-   workerId: 0
-   dataCenterId: 0
 fairy:
    defaultPassword: 123456 # 用户的默认密码
+   docker:
+     host: tcp://192.168.99.102:2376
+   snowflake:
+     workerId: 0
+     dataCenterId: 0
 

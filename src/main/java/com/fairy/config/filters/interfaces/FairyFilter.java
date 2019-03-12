@@ -12,7 +12,7 @@ public interface FairyFilter {
 		// 当前拦截器的状态 true表示允许,false表示禁止
 		private boolean status;
 		// 当前返回的消息,如果失败后会返回对应的错误的消息
-		private String message;
+		private String message = "";
 		// 当前请求的路径
 		private String path;
 		

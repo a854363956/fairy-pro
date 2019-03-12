@@ -42,7 +42,7 @@ public abstract class GlobalRouteFilter implements Filter {
 		for(Map.Entry<String,FairyFilter> entry : filters.entrySet()) {
 			try {
 				Result result = entry.getValue().isAllow(requestDto, (HttpServletRequest)request);
-				if(result.isStatus()) {
+				if(!result.isStatus()) {
 					throw new FairyException(result.getMessage());
 				}
 			} catch (Exception e) {
